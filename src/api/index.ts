@@ -1,11 +1,22 @@
-export { apiRequest } from './client';
+export { apiRequest, resolveApiAssetUrl } from './client';
 export { ApiError } from './errors';
 export { loginWithPassword, logout, getMe } from './auth';
 export { listAdminWashingPoints, getAdminStats } from './admin';
 export { listOwners, createOwner, updateOwner } from './owners';
 export { listConnectionRequests, createConnectionRequest, reviewConnectionRequest } from './connectionRequests';
 export { listQueueNetworkWide, updateBookingStatus } from './queue';
-export { createWashingPoint } from './washingPoints';
+export { createWashingPoint, getWashingPoint, updateWashingPoint } from './washingPoints';
+export {
+  listServices,
+  createService,
+  updateService,
+  deactivateService,
+  createPriceOption,
+  updatePriceOption,
+  deletePriceOption,
+} from './services';
+export { getSchedule, replaceSchedule } from './schedule';
+export { listPhotos, uploadPhoto, updatePhoto, deletePhoto } from './photos';
 export type {
   User,
   UserRole,
@@ -13,6 +24,7 @@ export type {
   WashingPointStatus,
   WashingPoint,
   WashingPointCreate,
+  WashingPointUpdate,
   AdminWashingPoint,
   AdminWashingPointList,
   AdminStats,
@@ -31,5 +43,16 @@ export type {
   BookingStatus,
   Booking,
   BookingStatusUpdate,
+  PriceOption,
+  PriceOptionInput,
+  Service,
+  ServiceList,
+  ServiceCreate,
+  ServiceUpdate,
+  Photo,
+  PhotoList,
+  PhotoUpdate,
+  ScheduleRow,
+  ScheduleList,
   ApiErrorBody,
 } from './types';

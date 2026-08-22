@@ -8,6 +8,17 @@ const API_BASE_URL: string =
   (import.meta as { env?: Record<string, string | undefined> }).env?.VITE_API_BASE_URL ??
   'http://localhost:8080/api/v1';
 
+// Uploaded photos are served at a top-level path (e.g. "/uploads/...")
+// outside /api/v1 (see q-wash-api's internal/platform/httpserver — not
+// under the versioned API router), so resolving them needs the API's
+// origin, not the app's own origin an unqualified relative <img src>
+// would otherwise resolve against.
+const API_ORIGIN: string = new URL(API_BASE_URL).origin;
+
+export function resolveApiAssetUrl(path: string): string {
+  return path.startsWith('http') ? path : `${API_ORIGIN}${path}`;
+}
+
 interface RequestOptions {
   skipAuth?: boolean;
 }
@@ -50,7 +61,11 @@ export async function apiRequest<T>(
   isRetry = false,
 ): Promise<T> {
   const headers = new Headers(init.headers);
-  headers.set('Content-Type', 'application/json');
+  // A FormData body (multipart uploads) must let fetch set its own
+  // Content-Type with the boundary — setting it ourselves breaks parsing.
+  if (!(init.body instanceof FormData)) {
+    headers.set('Content-Type', 'application/json');
+  }
   if (!options.skipAuth) {
     const accessToken = tokenStorage.getAccessToken();
     if (accessToken) headers.set('Authorization', `Bearer ${accessToken}`);

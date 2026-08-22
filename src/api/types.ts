@@ -8,6 +8,7 @@ export interface User {
   phone_number: string;
   name: string | null;
   role: UserRole;
+  washing_point_id: string | null;
   last_login_at: string | null;
 }
 
@@ -46,8 +47,24 @@ export interface WashingPoint {
   open_time: string;
   close_time: string;
   status: WashingPointStatus;
-  description: string | null;
-  amenities: string[];
+  // Both omitted from the JSON body entirely when unset (see API.md), not
+  // sent as null/[] — treat as possibly absent, not just possibly null.
+  description?: string;
+  amenities?: string[];
+}
+
+export interface WashingPointUpdate {
+  owner_id?: string;
+  name?: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  boxes_count?: number;
+  open_time?: string;
+  close_time?: string;
+  status?: WashingPointStatus;
+  description?: string;
+  amenities?: string[];
 }
 
 export interface AdminWashingPoint {
@@ -170,6 +187,79 @@ export interface Booking {
 
 export interface BookingStatusUpdate {
   status: 'waiting' | 'washing' | 'ready';
+}
+
+export interface PriceOption {
+  id: string;
+  name: string;
+  price_cents: number;
+  is_default: boolean;
+}
+
+export interface PriceOptionInput {
+  name: string;
+  price_cents: number;
+  is_default?: boolean;
+}
+
+export interface Service {
+  id: string;
+  washing_point_id: string;
+  name: string;
+  description: string | null;
+  duration_minutes: number;
+  picture_url: string | null;
+  is_active: boolean;
+  price_options: PriceOption[];
+}
+
+export interface ServiceList {
+  items: Service[];
+}
+
+export interface ServiceCreate {
+  name: string;
+  description?: string;
+  duration_minutes: number;
+  picture_url?: string;
+  price_options: PriceOptionInput[];
+}
+
+export interface ServiceUpdate {
+  name?: string;
+  description?: string;
+  duration_minutes?: number;
+  picture_url?: string;
+  is_active?: boolean;
+}
+
+export interface Photo {
+  id: string;
+  url: string;
+  is_cover: boolean;
+  sort_order: number;
+}
+
+export interface PhotoList {
+  items: Photo[];
+}
+
+export interface PhotoUpdate {
+  is_cover?: boolean;
+  sort_order?: number;
+}
+
+export interface ScheduleRow {
+  weekday: number;
+  is_open: boolean;
+  open_time?: string;
+  close_time?: string;
+  break_start?: string | null;
+  break_end?: string | null;
+}
+
+export interface ScheduleList {
+  items: ScheduleRow[];
 }
 
 export interface ApiErrorBody {

@@ -4,3 +4,4 @@ export { Panel } from './Panel';
 export { StatCard } from './StatCard';
 export { PrimaryButton, GhostButton, DangerButton } from './Button';
 export { DataTable, DataTableHeaderRow, DataTableRow } from './DataTable';
+export { Toggle } from './Toggle';

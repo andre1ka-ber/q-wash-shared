@@ -5,11 +5,12 @@ See `PLAN.md` for the full plan and build order.
 - [x] Phase A — Package scaffold
 - [x] Phase B — Theme tokens
 - [x] Phase C — API client core
-- [~] Phase D — Resource modules (auth + admin + owners + connection
-      requests + queue done; the rest land alongside whichever app needs
-      them first)
-- [~] Phase E — Shared components (StatusPill, StatCard, Panel, buttons,
-      DataTable shell done; Toggle not yet needed by any built screen)
+- [x] Phase D — Resource modules (auth, admin, owners, connection
+      requests, queue, washing-points, services, schedule, photos all
+      done — every resource any of the four planned web apps needs so far
+      has landed alongside the screen that first needed it)
+- [x] Phase E — Shared components (StatusPill, StatCard, Panel, buttons,
+      DataTable, Toggle)
 
 ## Log
 
@@ -83,3 +84,48 @@ See `PLAN.md` for the full plan and build order.
   `q-wash-admin`'s new-point wizard, finally wired to real submission
   this session (phase E — see its own `PROGRESS.md` for the map-picker
   and wizard-scope decisions that unblocked it).
+- 2026-08-22 (later, same day) — Added `washing_point_id: string | null` to
+  the `User` type, matching `q-wash-api`'s new `GET /me`/login response
+  field (see its own `PROGRESS.md`) — a small, explicitly-approved API
+  addition made specifically to unblock `q-wash-cabinet`'s auth, since its
+  locked-in "no point picker" design needs the logged-in staff user's own
+  point id and no endpoint previously exposed it.
+- 2026-08-22 (later still, same day) — Built out the rest of Phase D for
+  `q-wash-cabinet`'s three real tabs (see its own `PROGRESS.md` for the
+  full story):
+  - `Service`/`PriceOption`/`ServiceCreate`/`ServiceUpdate`/
+    `PriceOptionInput` types and `api/services.ts`
+    (`listServices`/`createService`/`updateService`/`deactivateService`/
+    `createPriceOption`/`updatePriceOption`/`deletePriceOption`).
+  - `ScheduleRow`/`ScheduleList` types and `api/schedule.ts`
+    (`getSchedule`/`replaceSchedule`).
+  - `Photo`/`PhotoList`/`PhotoUpdate` types and `api/photos.ts`
+    (`listPhotos`/`uploadPhoto`/`updatePhoto`/`deletePhoto`).
+  - `WashingPointUpdate` type and `getWashingPoint`/`updateWashingPoint` in
+    `api/washingPoints.ts`. Also corrected `WashingPoint.description`/
+    `.amenities` from `string | null`/`string[]` to optional
+    (`description?`/`amenities?`) — `API.md` documents both as *omitted*
+    from the JSON body when unset, not sent as `null`/`[]`, which the
+    original types (written before any screen read them) got wrong.
+  - `Toggle` component (`components/Toggle.tsx`) — deferred back on
+    2026-08-20 ("no built screen needs it yet, add it when
+    `q-wash-cabinet` needs it"); first real use is its Услуги tab's
+    active/inactive switch and Часы работы's per-day on/off switch.
+  - Two real fixes to `api/client.ts`, both found because
+    `q-wash-cabinet`'s Фото tab was the first screen in the platform to
+    touch file uploads or serve back an uploaded asset: `apiRequest` was
+    unconditionally forcing `Content-Type: application/json`, which
+    breaks a `multipart/form-data` photo upload (the browser must set its
+    own boundary) — now skipped when the request body is a `FormData`.
+    Added `resolveApiAssetUrl()`, since uploaded photos are served from a
+    top-level `/uploads/...` path outside `/api/v1`
+    (`q-wash-api/internal/platform/httpserver`), so rendering one needs
+    the API's origin, not the app's own — derived once from
+    `API_BASE_URL`'s own origin, not a second configured value.
+  - A few more Russian error-code messages added to `errors.ts`
+    (`invalid_content_type`, `file_too_large`, `invalid_hours`,
+    `invalid_break`, `invalid_schedule`, `cannot_unset_default`,
+    `last_price_option`, `price_option_in_use`,
+    `multiple_default_price_options`) — the first validation codes from
+    `q-wash-api`'s services/schedule/photos endpoints any built screen
+    actually surfaces to a user.

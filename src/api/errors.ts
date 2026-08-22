@@ -7,6 +7,16 @@ const RU_ERROR_MESSAGES: Record<string, string> = {
   forbidden: 'Недостаточно прав для этого действия',
   session_expired: 'Сессия истекла, войдите снова',
   network_error: 'Не удалось связаться с сервером',
+  invalid_content_type: 'Разрешены только изображения JPEG, PNG, GIF или WebP',
+  file_too_large: 'Файл слишком большой (максимум 10МБ)',
+  invalid_file: 'Не удалось прочитать файл',
+  invalid_hours: 'Проверьте время открытия и закрытия',
+  invalid_break: 'Проверьте время перерыва',
+  invalid_schedule: 'Не удалось сохранить расписание',
+  cannot_unset_default: 'Сначала назначьте другой вариант цены основным',
+  last_price_option: 'У услуги должен остаться хотя бы один вариант цены',
+  price_option_in_use: 'Этот вариант цены уже используется в записях',
+  multiple_default_price_options: 'Основным может быть только один вариант цены',
 };
 
 export class ApiError extends Error {
