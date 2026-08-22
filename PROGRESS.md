@@ -5,8 +5,9 @@ See `PLAN.md` for the full plan and build order.
 - [x] Phase A — Package scaffold
 - [x] Phase B — Theme tokens
 - [x] Phase C — API client core
-- [~] Phase D — Resource modules (auth + admin done; the rest land alongside
-      whichever app needs them first)
+- [~] Phase D — Resource modules (auth + admin + owners + connection
+      requests + queue done; the rest land alongside whichever app needs
+      them first)
 - [~] Phase E — Shared components (StatusPill, StatCard, Panel, buttons,
       DataTable shell done; Toggle not yet needed by any built screen)
 
@@ -55,3 +56,30 @@ See `PLAN.md` for the full plan and build order.
     ~6.0.2, `@tanstack/react-query` 5.101, `react-router-dom` 7.18) rather
     than hand-picked latests, to stay on a combination the tooling itself
     vouches for.
+- 2026-08-22 — Added `Owner`/`OwnerList`/`OwnerCreate`/`OwnerUpdate` types
+  and `api/owners.ts` (`listOwners`/`createOwner`/`updateOwner`) for
+  `q-wash-admin`'s new Owners screen (see its own `PROGRESS.md`). No
+  `deleteOwner` — `openapi.yaml` has no `DELETE /owners/{id}`.
+- 2026-08-22 (same session) — Added two more resource modules for
+  `q-wash-admin`'s Connection requests and Bookings screens (see its own
+  `PROGRESS.md` for the full story, including a real `GET /queue`
+  attribution gap found and worked around client-side):
+  - `ConnectionRequestStatus`/`ConnectionRequest`/`ConnectionRequestList`/
+    `ConnectionRequestCreate`/`ConnectionRequestReview` types and
+    `api/connectionRequests.ts`
+    (`listConnectionRequests`/`createConnectionRequest`/
+    `reviewConnectionRequest`).
+  - `BoardItemStatus`/`BoardItem`/`BoardItemList`/`BookingStatus`/
+    `Booking`/`BookingStatusUpdate` types and `api/queue.ts`
+    (`listQueueNetworkWide`/`updateBookingStatus`). `Booking` is typed in
+    full (matches `openapi.yaml`) even though only `id`/`status` are
+    actually read right now — `updateBookingStatus`'s response is a full
+    `Booking`, and the wizard (phase E) or a future booking-detail view
+    will want the rest of the fields already being there.
+- 2026-08-22 (later, same day) — Added `WashingPoint` (full response
+  schema, matching `openapi.yaml`) and `api/washingPoints.ts`
+  (`createWashingPoint`) — the `WashingPointCreate` type predicted this
+  back on 2026-08-20 but had no caller until now. Used by
+  `q-wash-admin`'s new-point wizard, finally wired to real submission
+  this session (phase E — see its own `PROGRESS.md` for the map-picker
+  and wizard-scope decisions that unblocked it).
