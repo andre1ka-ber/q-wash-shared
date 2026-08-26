@@ -1,5 +1,5 @@
 import { apiRequest } from './client';
-import type { BoardItemList, Booking, BookingStatusUpdate, LiveBoxList } from './types';
+import type { BoardItemList, Booking, BookingStatusUpdate, DisplayBoard, LiveBoxList } from './types';
 
 // Admin-only when washingPointId is omitted — returns every point's live
 // board at once. staff/worker callers are always forced server-side to
@@ -36,6 +36,13 @@ export function pauseBooking(id: string): Promise<Booking> {
 
 export function resumeBooking(id: string): Promise<Booking> {
   return apiRequest<Booking>(`/queue/${id}/resume`, { method: 'PATCH' });
+}
+
+// GET /washing-points/{id}/board — staff/admin only (not worker, unlike
+// boxes/live above — the display kiosk logs in as staff/admin, no new
+// role). q-wash-display's one summary screen.
+export function getDisplayBoard(washingPointId: string): Promise<DisplayBoard> {
+  return apiRequest<DisplayBoard>(`/washing-points/${washingPointId}/board`);
 }
 
 // Reachable by the booking's own customer or by staff/worker/admin at its

@@ -193,6 +193,44 @@ export interface LiveBoxList {
   items: LiveBox[];
 }
 
+// GET /washing-points/{id}/board — q-wash-display's one summary screen.
+// staff/admin only (not worker, unlike LiveBox above). No id field on
+// DisplayBoardBooking — the board is a summary screen, it never links to
+// a single booking.
+export interface DisplayBoardBooking {
+  status: 'washing';
+  service_name?: string;
+  scheduled_start_at: string;
+  scheduled_end_at: string;
+  paused_at?: string;
+  customer_phone_last4: string;
+  car_name?: string;
+}
+
+export interface DisplayBoardBox {
+  number: number;
+  label?: string;
+  is_open: boolean;
+  current?: DisplayBoardBooking;
+}
+
+export interface DisplayBoardWaitingItem {
+  id: string;
+  status: 'queue' | 'waiting';
+  box_number: number;
+  service_name?: string;
+  scheduled_start_at: string;
+  customer_phone_last4: string;
+  car_name?: string;
+}
+
+export interface DisplayBoard {
+  boxes_active: number;
+  boxes_total: number;
+  boxes: DisplayBoardBox[];
+  waiting: DisplayBoardWaitingItem[];
+}
+
 export type BookingStatus = 'queue' | 'waiting' | 'washing' | 'ready' | 'canceled';
 
 export interface Booking {

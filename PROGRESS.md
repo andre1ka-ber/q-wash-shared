@@ -6,10 +6,11 @@ See `PLAN.md` for the full plan and build order.
 - [x] Phase B — Theme tokens
 - [x] Phase C — API client core
 - [x] Phase D — Resource modules (auth, admin, owners, connection
-      requests, queue (network board, per-point board, live-boxes, status/
-      pause/resume/cancel), washing-points, services, schedule, photos,
-      boxes all done — every resource any of the four planned web apps
-      needs so far has landed alongside the screen that first needed it)
+      requests, queue (network board, per-point board, live-boxes,
+      display board, status/pause/resume/cancel), washing-points,
+      services, schedule, photos, boxes all done — every resource any of
+      the four planned web apps needs so far has landed alongside the
+      screen that first needed it)
 - [x] Phase E — Shared components (StatusPill, StatCard, Panel, buttons,
       DataTable, Toggle)
 
@@ -160,3 +161,29 @@ See `PLAN.md` for the full plan and build order.
   first codes `PATCH /queue/{id}/pause|resume|status|cancel` can actually
   surface to a screen, verified against the real API's wire format via
   `curl` (see `q-wash-worker/PROGRESS.md`), not guessed from the Go source.
+
+- 2026-08-26 (later, same day) — **`getDisplayBoard`** (`api/queue.ts`) +
+  `DisplayBoard`/`DisplayBoardBox`/`DisplayBoardBooking`/
+  `DisplayBoardWaitingItem` types, matching the new
+  `GET /washing-points/{id}/board` endpoint (`q-wash-api` phase 8) for
+  `q-wash-display`'s one screen — see its own `PROGRESS.md`.
+
+  **Real bug found and fixed in `auth/authStore.ts`**, not
+  display-specific but found *because of* display's own resilience
+  testing (this is the one app that reloads unattended, so it's the one
+  where the bug actually bit): `restore()`'s bare `catch { tokenStorage
+  .clear(); ...unauthenticated }` treated a plain network failure from
+  `getMe()` identically to a real logged-out session — clearing perfectly
+  valid tokens and forcing every app back to its login screen on nothing
+  more than a transient blip at the wrong moment. Every one of the four
+  web apps calls `restore()` on mount; it just never mattered for the
+  other three, since a human reloading an interactive app during a
+  network hiccup would just retry and rarely even notice a flash of the
+  login screen. Fixed: `restore()` now retries up to 5 times with
+  exponential backoff specifically when the error is
+  `ApiError('network_error', ...)`, only clearing tokens and going
+  `unauthenticated` on an actual rejection (any other `ApiError` code —
+  expired/revoked token, 403, etc.) or once retries are exhausted.
+  Re-typechecked `q-wash-admin`/`q-wash-cabinet`/`q-wash-worker` against
+  this change — all clean, no regressions, and all three benefit from the
+  fix even though none of them surfaced the bug themselves.

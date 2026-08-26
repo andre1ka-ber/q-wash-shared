@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { getMe, loginWithPassword, logout as logoutRequest } from '../api/auth';
+import { ApiError } from '../api/errors';
 import type { User } from '../api/types';
 import { tokenStorage } from './tokenStorage';
 
@@ -29,17 +30,33 @@ class AuthStore {
     this.listeners.forEach((listener) => listener());
   }
 
+  // Retries on a plain network failure instead of immediately treating it
+  // as "not logged in" — found via q-wash-display's own resilience
+  // verification (this screen reloads unattended, potentially for days;
+  // a transient network blip at exactly the wrong moment shouldn't force
+  // a kiosk into a spurious logged-out state nobody's there to fix). A
+  // real auth rejection (any ApiError that isn't network_error — expired/
+  // revoked token, 403, etc.) still clears immediately, same as before.
   async restore(): Promise<void> {
     if (!tokenStorage.getAccessToken()) {
       this.setState({ user: null, status: 'unauthenticated' });
       return;
     }
-    try {
-      const user = await getMe();
-      this.setState({ user, status: 'authenticated' });
-    } catch {
-      tokenStorage.clear();
-      this.setState({ user: null, status: 'unauthenticated' });
+    const maxAttempts = 5;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
+        const user = await getMe();
+        this.setState({ user, status: 'authenticated' });
+        return;
+      } catch (err) {
+        const isNetworkError = err instanceof ApiError && err.code === 'network_error';
+        if (!isNetworkError || attempt === maxAttempts - 1) {
+          tokenStorage.clear();
+          this.setState({ user: null, status: 'unauthenticated' });
+          return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** attempt));
+      }
     }
   }
 
