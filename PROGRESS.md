@@ -6,9 +6,9 @@ See `PLAN.md` for the full plan and build order.
 - [x] Phase B — Theme tokens
 - [x] Phase C — API client core
 - [x] Phase D — Resource modules (auth, admin, owners, connection
-      requests, queue, washing-points, services, schedule, photos all
-      done — every resource any of the four planned web apps needs so far
-      has landed alongside the screen that first needed it)
+      requests, queue, washing-points, services, schedule, photos, boxes
+      all done — every resource any of the four planned web apps needs so
+      far has landed alongside the screen that first needed it)
 - [x] Phase E — Shared components (StatusPill, StatCard, Panel, buttons,
       DataTable, Toggle)
 
@@ -129,3 +129,14 @@ See `PLAN.md` for the full plan and build order.
     `multiple_default_price_options`) — the first validation codes from
     `q-wash-api`'s services/schedule/photos endpoints any built screen
     actually surfaces to a user.
+
+- 2026-08-26 — **Boxes resource added** (`api/boxes.ts` +
+  `Box`/`BoxList`/`BoxCreate`/`BoxUpdate` in `types.ts`), same 4-file
+  list/create/update/delete shape as `photos.ts`/`services.ts`, backing
+  `q-wash-cabinet`'s newly-unblocked Боксы tab (`Box` entity shipped in
+  `q-wash-api` phase 6, verified against real Postgres this session — see
+  `q-wash-api/PROGRESS.md`). Response shape is intentionally minimal
+  (`id`/`number`/`label`/`is_open`) — matches the real API exactly, no
+  speculative fields for the mock's services-count/slot-length/
+  today's-bookings stats, which the backend doesn't compute per-box
+  (decided with the user rather than guessed).

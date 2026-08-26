@@ -233,6 +233,26 @@ export interface ServiceUpdate {
   is_active?: boolean;
 }
 
+export interface Box {
+  id: string;
+  number: number;
+  label: string | null;
+  is_open: boolean;
+}
+
+export interface BoxList {
+  items: Box[];
+}
+
+export interface BoxCreate {
+  label?: string;
+}
+
+export interface BoxUpdate {
+  label?: string;
+  is_open?: boolean;
+}
+
 export interface Photo {
   id: string;
   url: string;

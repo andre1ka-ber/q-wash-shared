@@ -17,6 +17,7 @@ export {
 } from './services';
 export { getSchedule, replaceSchedule } from './schedule';
 export { listPhotos, uploadPhoto, updatePhoto, deletePhoto } from './photos';
+export { listBoxes, createBox, updateBox, deleteBox } from './boxes';
 export type {
   User,
   UserRole,
@@ -54,5 +55,9 @@ export type {
   PhotoUpdate,
   ScheduleRow,
   ScheduleList,
+  Box,
+  BoxList,
+  BoxCreate,
+  BoxUpdate,
   ApiErrorBody,
 } from './types';
