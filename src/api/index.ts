@@ -4,7 +4,15 @@ export { loginWithPassword, logout, getMe } from './auth';
 export { listAdminWashingPoints, getAdminStats } from './admin';
 export { listOwners, createOwner, updateOwner } from './owners';
 export { listConnectionRequests, createConnectionRequest, reviewConnectionRequest } from './connectionRequests';
-export { listQueueNetworkWide, updateBookingStatus } from './queue';
+export {
+  listQueueNetworkWide,
+  listQueueByWashingPoint,
+  getBoxesLive,
+  updateBookingStatus,
+  pauseBooking,
+  resumeBooking,
+  cancelBooking,
+} from './queue';
 export { createWashingPoint, getWashingPoint, updateWashingPoint } from './washingPoints';
 export {
   listServices,
@@ -41,6 +49,9 @@ export type {
   BoardItemStatus,
   BoardItem,
   BoardItemList,
+  LiveBoxBooking,
+  LiveBox,
+  LiveBoxList,
   BookingStatus,
   Booking,
   BookingStatusUpdate,

@@ -17,6 +17,11 @@ const RU_ERROR_MESSAGES: Record<string, string> = {
   last_price_option: 'У услуги должен остаться хотя бы один вариант цены',
   price_option_in_use: 'Этот вариант цены уже используется в записях',
   multiple_default_price_options: 'Основным может быть только один вариант цены',
+  cannot_pause: 'Поставить на паузу можно только во время мойки',
+  cannot_resume: 'Эта запись сейчас не на паузе',
+  cannot_cancel: 'Запись можно снять только до начала мойки',
+  invalid_status_transition: 'Не удалось изменить статус записи',
+  queue_not_found: 'Запись не найдена — возможно, её уже обработали',
 };
 
 export class ApiError extends Error {

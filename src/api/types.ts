@@ -158,12 +158,39 @@ export interface BoardItem {
   box_number: number;
   scheduled_start_at: string;
   scheduled_end_at: string;
+  paused_at?: string;
   customer_phone_last4: string;
   car_name?: string;
 }
 
 export interface BoardItemList {
   items: BoardItem[];
+}
+
+// GET /washing-points/{id}/boxes/live — q-wash-worker's box-cards screen.
+// status here is never 'ready'/'canceled' (see q-wash-api's
+// queue.Handler.boxesLive: only queue/waiting/washing rows are joined in).
+export interface LiveBoxBooking {
+  id: string;
+  status: BoardItemStatus;
+  service_name?: string;
+  scheduled_start_at: string;
+  scheduled_end_at: string;
+  paused_at?: string;
+  customer_phone_last4: string;
+  car_name?: string;
+}
+
+export interface LiveBox {
+  number: number;
+  label?: string;
+  is_open: boolean;
+  current?: LiveBoxBooking;
+  next?: LiveBoxBooking;
+}
+
+export interface LiveBoxList {
+  items: LiveBox[];
 }
 
 export type BookingStatus = 'queue' | 'waiting' | 'washing' | 'ready' | 'canceled';

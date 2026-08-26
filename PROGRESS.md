@@ -6,9 +6,10 @@ See `PLAN.md` for the full plan and build order.
 - [x] Phase B — Theme tokens
 - [x] Phase C — API client core
 - [x] Phase D — Resource modules (auth, admin, owners, connection
-      requests, queue, washing-points, services, schedule, photos, boxes
-      all done — every resource any of the four planned web apps needs so
-      far has landed alongside the screen that first needed it)
+      requests, queue (network board, per-point board, live-boxes, status/
+      pause/resume/cancel), washing-points, services, schedule, photos,
+      boxes all done — every resource any of the four planned web apps
+      needs so far has landed alongside the screen that first needed it)
 - [x] Phase E — Shared components (StatusPill, StatCard, Panel, buttons,
       DataTable, Toggle)
 
@@ -140,3 +141,22 @@ See `PLAN.md` for the full plan and build order.
   speculative fields for the mock's services-count/slot-length/
   today's-bookings stats, which the backend doesn't compute per-box
   (decided with the user rather than guessed).
+
+- 2026-08-26 (later, same day) — **Queue resource extended for
+  `q-wash-worker`'s Phase C** (its box-cards + today's-queue screen, wired
+  to real data this session — see its own `PROGRESS.md`). Added to
+  `api/queue.ts`: `listQueueByWashingPoint(id, date?)`
+  (`GET .../queue?date=`), `getBoxesLive(id)` (`GET .../boxes/live`),
+  `pauseBooking`/`resumeBooking`/`cancelBooking`
+  (`PATCH .../pause|resume|cancel`) — `listQueueNetworkWide`/
+  `updateBookingStatus` already existed (admin-only board) but nothing
+  worker-scoped did yet. New `LiveBoxBooking`/`LiveBox`/`LiveBoxList`
+  types matching `queue.Handler.boxesLive`'s response exactly; added the
+  missing `paused_at?: string` to the existing `BoardItem` type (the real
+  `boardItemResponse` always had it, the type had just never been checked
+  against it since no screen read that field before). Added five error
+  codes to `errors.ts`'s Russian map — `cannot_pause`, `cannot_resume`,
+  `cannot_cancel`, `invalid_status_transition`, `queue_not_found` — the
+  first codes `PATCH /queue/{id}/pause|resume|status|cancel` can actually
+  surface to a screen, verified against the real API's wire format via
+  `curl` (see `q-wash-worker/PROGRESS.md`), not guessed from the Go source.
