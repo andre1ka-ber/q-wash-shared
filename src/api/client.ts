@@ -3,8 +3,11 @@ import { ApiError, messageForCode } from './errors';
 import type { ApiErrorBody, TokenPair } from './types';
 
 // Each consuming app sets VITE_API_BASE_URL in its own .env; this default
-// matches q-wash-api's local dev port (see q-wash-api/README.md).
-const API_BASE_URL: string =
+// matches q-wash-api's local dev port (see q-wash-api/README.md). Exported
+// so ../sse/client.ts can build stream URLs without duplicating this
+// resolution logic — apiRequest itself stays the only thing that knows
+// about auth/refresh, everything else just needs the base.
+export const API_BASE_URL: string =
   (import.meta as { env?: Record<string, string | undefined> }).env?.VITE_API_BASE_URL ??
   'http://localhost:8080/api/v1';
 

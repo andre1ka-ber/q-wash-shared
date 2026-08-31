@@ -187,3 +187,32 @@ See `PLAN.md` for the full plan and build order.
   Re-typechecked `q-wash-admin`/`q-wash-cabinet`/`q-wash-worker` against
   this change — all clean, no regressions, and all three benefit from the
   fix even though none of them surfaced the bug themselves.
+
+- 2026-08-31 — **New `src/sse/client.ts`**, built to support
+  `q-wash-display`'s Phase D (SSE upgrade, resumed after being deferred),
+  which needed a way to consume `q-wash-api`'s new
+  `GET /washing-points/{id}/board/events` stream. Not part of the original
+  Phase D (Resource modules) — this is transport, not a resource module.
+
+  Native browser `EventSource` cannot attach the `Authorization: Bearer`
+  header every `q-wash-api` route requires, so `subscribeToBoardEvents`
+  hand-rolls the SSE protocol over `fetch()`'s `ReadableStream` instead:
+  attaches the bearer token from the existing `tokenStorage`, parses
+  `data: ...\n\n` frames, skips `: ping` heartbeat comment frames. Exported
+  `API_BASE_URL` from `api/client.ts` (was module-private) so this module
+  can build the stream URL without duplicating that resolution logic —
+  `apiRequest` stays the only thing that knows about auth/refresh.
+
+  Reconnects indefinitely with capped exponential backoff (1s doubling up
+  to a 30s cap) rather than `authStore.restore()`'s bounded 5-attempt
+  retry — there's no equivalent "give up" state for a board stream, since
+  the caller's own polling fallback (see `q-wash-display/PLAN.md`'s
+  "polling ships first" decision) keeps the screen usable regardless of
+  how long the stream itself takes to reconnect.
+
+  `tsc -b`/`oxlint` clean here; re-typechecked `q-wash-admin`/
+  `q-wash-worker`/`q-wash-cabinet` against this change too — all clean, no
+  regressions (none of the three consume the new module yet, only
+  `q-wash-display` will). No test runner exists in this package (see
+  `docs/testing.md`) — correctness is verified live in
+  `q-wash-display/PROGRESS.md`'s own entry instead.
