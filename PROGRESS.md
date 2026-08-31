@@ -216,3 +216,34 @@ See `PLAN.md` for the full plan and build order.
   `q-wash-display` will). No test runner exists in this package (see
   `docs/testing.md`) — correctness is verified live in
   `q-wash-display/PROGRESS.md`'s own entry instead.
+
+- 2026-08-31 — **Test infra added.** This package holds logic every one of
+  the four web apps depends on, so a bug here breaks four apps silently —
+  yet had zero tests. Added Vitest (`vitest`, `jsdom` devDeps, `npm test`
+  runs `vitest run`), `vitest.config.ts` (jsdom environment). 22 tests
+  across 4 files, all passing:
+  - `api/errors.test.ts` — `messageForCode` known/fallback, `ApiError`
+    shape.
+  - `api/client.test.ts` — `apiRequest`'s single-flight refresh-on-401
+    (concurrent 401s trigger exactly one `/auth/refresh` call), retry-once
+    semantics (a second 401 after refresh throws instead of looping),
+    `network_error` on a rejected `fetch`, 204 handling, `skipAuth`
+    bypassing refresh entirely.
+  - `auth/authStore.test.ts` — `restore()`'s no-token/success/non-network-
+    rejection/network-retry/give-up-after-5 paths (fake timers for the
+    backoff), `login()`, `logout()` clearing tokens even when the request
+    itself fails. Each test gets a fresh `AuthStore` singleton via
+    `vi.resetModules()` + dynamic re-import — first pass mixed a
+    statically-imported `ApiError` class with the store's freshly
+    re-evaluated one, so `err instanceof ApiError` silently failed inside
+    `restore()`; fixed by importing `ApiError` from the same fresh module
+    graph as the store in every test that constructs one.
+  - `sse/client.test.ts` — `subscribeToBoardEvents` frame parsing (skips
+    `: ping`, reports a malformed frame via `onError` without dropping the
+    stream), exponential backoff up to the 30s cap (verified against a
+    formula, not a fixed call count, so it holds at any elapsed time),
+    `unsubscribe()` actually stopping the reconnect loop.
+
+  `npx tsc --noEmit` clean. No lint script exists in this package.
+  Updated `docs/testing.md`'s q-wash-shared bullet (was "not yet
+  scaffolded") to record the Vitest decision.
