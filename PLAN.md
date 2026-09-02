@@ -34,11 +34,15 @@ q-wash-shared/
                         auth-state store (login, logout, restore-on-load,
                         role check) — framework-agnostic, each app wires it
                         into its own router's redirect logic
-    sse/                a small EventSource wrapper for the endpoints that
-                        stream (customer queue SSE exists already; the
-                        display board's SSE variant per
-                        q-wash-api/docs/PLAN_WEB_APPS.md would use this
-                        too, once built)
+    sse/                `subscribeToBoardEvents`, added 2026-08-31 for
+                        `q-wash-display`'s board stream
+                        (`GET /washing-points/{id}/board/events`). Native
+                        `EventSource` can't attach the `Authorization`
+                        header every route needs, so this hand-rolls the
+                        SSE protocol over `fetch()`'s `ReadableStream`
+                        instead — not an `EventSource` wrapper. Only this
+                        one endpoint is covered so far; no other web-app
+                        screen consumes an SSE stream yet
     components/         the handful of primitives every screen in the mock
                         reuses: StatusPill (ok/warn/bad/mute), Toggle
                         switch, PrimaryButton/GhostButton/DangerButton,
@@ -64,36 +68,30 @@ q-wash-shared/
   more friction (extra build step, generated-file review noise) than it
   saves; revisit if the surface grows a lot across the backend phases in
   `q-wash-api/docs/PLAN_WEB_APPS.md`.
-- **Depends on backend phases landing incrementally**: the `api/` client
+- **Depended on backend phases landing incrementally**: the `api/` client
   modules for owners/boxes/schedule/photos/connection-requests/worker
-  pause-resume/public-board don't exist yet because the endpoints don't
-  exist yet (see `q-wash-api/docs/PLAN_WEB_APPS.md`) — built alongside
-  each backend phase, not all up front against a spec that hasn't shipped.
+  pause-resume/public-board were added alongside each backend phase in
+  `q-wash-api/docs/PLAN_WEB_APPS.md` as it shipped, not all up front — as
+  of 2026-09-02 every resource any of the four web apps needs exists in
+  `src/api/`.
 
 ## Build order
 
-- [ ] **A — Package scaffold**: `npm create vite` (react-ts template, but
-      built as a library — no `index.html` app shell needed here), `tsc`
-      build config that emits declarations, `package.json` with a `build`
-      script the four apps' own build can depend on (or just consume the
-      TS source directly via Vite's transpile-on-the-fly, skipping a
-      separate build step entirely — decide once the first app tries to
-      import it; simplest option first).
-- [ ] **B — Theme tokens**: colors/type/radii extracted from `Car Wash Web
-      Apps.dc.html`'s inline styles, Prata + Manrope font files (reuse the
-      same TTFs already bundled in `q-wash/assets/fonts` rather than
-      re-downloading).
-- [ ] **C — API client core**: base fetch wrapper, token-refresh
-      interceptor logic, error typing matching `q-wash-api`'s error-code
-      envelope (same one `q-wash` (mobile)'s `api_exception.dart` maps to
-      Russian strings — this package should probably own that Russian
-      error-code map too, so all four web apps get it for free instead of
-      reimplementing it).
-- [ ] **D — Resource modules**: one per existing endpoint group first
-      (washingPoints, services, queue, auth/login) since those exist in
-      `q-wash-api` today; new ones added as each backend phase in
-      `q-wash-api/docs/PLAN_WEB_APPS.md` ships.
-- [ ] **E — Shared components**: StatusPill, Toggle, buttons, StatCard,
-      DataTable shell, built against the mock's literal inline styles.
+All phases below are done — see `PROGRESS.md` for the full log.
+
+- [x] **A — Package scaffold**: consumed as raw TS source via a `file:`
+      dependency (no separate build step) — `package.json`'s
+      `main`/`types`/`exports` point straight at `src/index.ts`, and
+      Vite's transpile-on-the-fly in each consuming app handles the rest.
+- [x] **B — Theme tokens**: colors/type/radii extracted from the mock's
+      inline styles; Prata + Manrope TTFs reused from `q-wash/assets/fonts`.
+- [x] **C — API client core**: base fetch wrapper, single coalesced
+      token-refresh exchange on 401 with retry-once semantics, Russian
+      error-code map (`api/errors.ts`).
+- [x] **D — Resource modules**: one per `q-wash-api` resource group —
+      washingPoints, owners, services, boxes, queue, schedule, photos,
+      connectionRequests, admin, auth.
+- [x] **E — Shared components**: StatusPill, Toggle, buttons, StatCard,
+      Panel, DataTable.
 
 Progress logged in `PROGRESS.md` as work happens.
