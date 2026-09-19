@@ -1,50 +1,51 @@
 // Design tokens lifted 1:1 from the Claude Design mock
-// ("Car Wash Web Apps.dc.html") — one fixed dark palette, no light mode.
+// ("Car Wash Web Apps.dc.html") — refreshed 2026-09-19 (new palette/font/logo).
+// One fixed dark palette, no light mode.
 
 export const color = {
-  pageBg: '#0b0a0b',
-  surface: '#141014',
-  surfaceAlt: '#100d10',
-  panel: '#1a161a',
-  panelAlt: '#161216',
-  input: '#1b171b',
+  pageBg: '#0A0A09',
+  surface: '#121211',
+  surfaceAlt: '#0F0F0E',
+  panel: '#191917',
+  panelAlt: '#151513',
+  input: '#1A1A18',
 
   border: '#262026',
-  borderAlt: '#241f24',
-  borderStrong: '#2a242a',
-  borderDashed: '#383138',
+  borderAlt: '#232320',
+  borderStrong: '#2B2B26',
+  borderDashed: '#373731',
   rowBorder: '#211c21',
 
-  textPrimary: '#f7f2ea',
-  textPrimaryAlt: '#f2ece4',
-  textSecondary: '#c9bfc6',
-  textTertiary: '#9b9198',
-  textMuted: '#8a8188',
-  textFaint: '#6f666d',
-  textDim: '#4f484e',
+  textPrimary: '#F6F5EF',
+  textPrimaryAlt: '#F1F0E9',
+  textSecondary: '#C9C7BF',
+  textTertiary: '#93918A',
+  textMuted: '#A5A39B',
+  textFaint: '#93918A',
+  textDim: '#4E4E47',
 
-  gold: '#d9b26a',
-  goldLight: '#efd4a0',
-  goldOnLight: '#171317',
+  gold: '#F2D14B',
+  goldLight: '#F8E489',
+  goldOnLight: '#191813',
 
-  ok: '#8ec49a',
-  okBg: 'rgba(122,177,132,.12)',
-  okBgStrong: 'rgba(122,177,132,.16)',
+  ok: '#8FCB86',
+  okBg: 'rgba(143,203,134,.14)',
+  okBgStrong: 'rgba(143,203,134,.18)',
 
-  warn: '#d9b26a',
-  warnBg: 'rgba(217,178,106,.16)',
+  warn: '#F2D14B',
+  warnBg: 'rgba(242,209,75,.16)',
 
-  bad: '#c98b8b',
-  badBg: 'rgba(201,139,139,.14)',
-  badBorder: '#3a2b2b',
+  bad: '#D08A7A',
+  badBg: 'rgba(208,138,122,.14)',
+  badBorder: '#3A2B26',
 
-  mute: '#9b9198',
-  muteBg: '#241f24',
+  mute: '#A5A39B',
+  muteBg: '#232320',
 } as const;
 
 export const font = {
-  display: '"Prata", Georgia, serif',
-  body: '"Manrope", system-ui, sans-serif',
+  display: '"Sora", system-ui, sans-serif',
+  body: '"Sora", system-ui, sans-serif',
 } as const;
 
 export const radius = {

@@ -247,3 +247,24 @@ See `PLAN.md` for the full plan and build order.
   `npx tsc --noEmit` clean. No lint script exists in this package.
   Updated `docs/testing.md`'s q-wash-shared bullet (was "not yet
   scaffolded") to record the Vitest decision.
+
+- 2026-09-19 — **New palette/font/logo from Claude Design applied.**
+  Imported the refreshed mock ("Car Wash Web Apps.dc.html", project
+  `f6bd39c5-b19d-4809-8dd5-e05719c4f6e9`) via the `DesignSync` tool's read
+  methods (not `/design-sync` — that skill pushes a local component
+  library *up to* claude.ai/design; this was the opposite direction, pulling
+  a design's palette/font/logo *down* into the app, so its read-only
+  `get_project`/`list_files`/`get_file` methods were used directly).
+  - `theme/tokens.ts`: every `color.*` value replaced (near-black
+    `#0A0A09` base instead of the old warm `#0b0a0b`/gold-brown palette;
+    same token names/roles throughout, so no consumer changed). `font.*`
+    collapsed to a single `"Sora"` family for both `display` and `body`
+    (was serif `Prata` + sans `Manrope`). `radius.*`/`shadow.*` unchanged.
+  - Dropped self-hosted `theme/fonts.css` and `assets/fonts/{Manrope-
+    Variable,Prata-Regular}.ttf` — user chose Google Fonts CDN over
+    self-hosting Sora, so each app now loads it via `<link>` tags in its
+    own `index.html` instead.
+  - Added `components/LogoMark.tsx` (gold rounded square, 3 stacked bars,
+    `size` prop) replacing the old bordered single-letter badge used
+    across all four apps' sidebar/header/login screens.
+  - `npm run typecheck` and `npm test` (22/22) both clean.
