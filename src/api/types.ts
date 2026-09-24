@@ -347,6 +347,51 @@ export interface ScheduleList {
   items: ScheduleRow[];
 }
 
+export type QrCodeStatus = 'free' | 'assigned' | 'disabled';
+
+export interface QrCodeDayCount {
+  date: string;
+  count: number;
+}
+
+export interface QrCodeStats {
+  scans_today: number;
+  scans_7d: number;
+  scans_by_day: QrCodeDayCount[];
+  bookings_via_qr: number;
+}
+
+export interface QrCode {
+  id: string;
+  code: string;
+  token: string;
+  status: QrCodeStatus;
+  batch_label: string;
+  washing_point_id: string | null;
+  washing_point_name: string | null;
+  assigned_at: string | null;
+  disabled_at: string | null;
+  replacement_requested_at: string | null;
+  created_at: string;
+  stats?: QrCodeStats;
+}
+
+export interface QrCodeList {
+  items: QrCode[];
+}
+
+export interface QrCodePoolStats {
+  total: number;
+  free: number;
+  assigned: number;
+  disabled: number;
+}
+
+export interface QrCodePoolList {
+  items: QrCode[];
+  stats: QrCodePoolStats;
+}
+
 export interface ApiErrorBody {
   error: {
     code: string;

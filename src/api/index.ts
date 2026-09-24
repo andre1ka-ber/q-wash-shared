@@ -27,6 +27,16 @@ export {
 export { getSchedule, replaceSchedule } from './schedule';
 export { listPhotos, uploadPhoto, updatePhoto, deletePhoto } from './photos';
 export { listBoxes, createBox, updateBox, deleteBox } from './boxes';
+export {
+  generateQrCodes,
+  listQrCodes,
+  getQrCode,
+  assignQrCode,
+  unassignQrCode,
+  disableQrCode,
+  getMyQrCode,
+  requestQrCodeReplacement,
+} from './qrCodes';
 export type {
   User,
   UserRole,
@@ -75,5 +85,12 @@ export type {
   BoxList,
   BoxCreate,
   BoxUpdate,
+  QrCodeStatus,
+  QrCode,
+  QrCodeList,
+  QrCodeDayCount,
+  QrCodeStats,
+  QrCodePoolStats,
+  QrCodePoolList,
   ApiErrorBody,
 } from './types';

@@ -277,3 +277,31 @@ See `PLAN.md` for the full plan and build order.
   the "Car Wash Web Apps Mobile.dc.html" mock) to all four web apps — see
   each app's own PROGRESS.md for its mobile-view entry. `npm test`
   (25/25) and `tsc --noEmit` both clean.
+
+- 2026-09-24 — **QR-code API client + rendering component**, the
+  q-wash-shared half of the platform's QR-codes feature (backend landed
+  first this same day — see `q-wash-api/PROGRESS.md`). `src/api/qrCodes.ts`
+  (new): `generateQrCodes`, `listQrCodes`, `getQrCode`, `assignQrCode`,
+  `unassignQrCode`, `disableQrCode`, `getMyQrCode`, `requestQrCodeReplacement`
+  — same plain-async-function-over-`apiRequest` shape as
+  `connectionRequests.ts`, wire-format-matched against the real (already
+  green) backend rather than guessed. `getMyQrCode` deliberately lets a 404
+  (`qr_code_not_found` — no code assigned yet) propagate as a thrown
+  `ApiError` instead of swallowing it, so callers can render an empty
+  state. New types in `api/types.ts` (`QrCode`, `QrCodeStatus`,
+  `QrCodeStats`, `QrCodeDayCount`, `QrCodePoolStats`, `QrCodePoolList`,
+  `QrCodeList`), barrel-exported from `api/index.ts`.
+
+  Added the `qrcode` npm dependency (+ `@types/qrcode` dev-only — the
+  package ships no bundled types) via `npm install`, the one new
+  dependency approved for this feature. `components/QrCodeImage.tsx`
+  (new) uses `qrcode`'s **synchronous** low-level `create(text).modules`
+  bit-matrix API — not the async `toDataURL`/`toString` helpers — to hand-
+  build the same `"M{x} {y}h1v1h-1z"`-per-module inline-SVG-path technique
+  the design mock's own fake generator used, now encoding real, scannable
+  data instead of random noise. Kept deliberately synchronous (no
+  `useEffect`/loading state) to match this codebase's existing
+  all-inline-style render convention.
+
+  `npm test` (32/32, incl. new `api/qrCodes.test.ts` and
+  `components/QrCodeImage.test.tsx`) and `tsc --noEmit` both clean.

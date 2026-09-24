@@ -6,3 +6,5 @@ export { StatCard } from './StatCard';
 export { PrimaryButton, GhostButton, DangerButton } from './Button';
 export { DataTable, DataTableHeaderRow, DataTableRow } from './DataTable';
 export { Toggle } from './Toggle';
+export { QrCodeImage } from './QrCodeImage';
+export type { QrCodeImageProps } from './QrCodeImage';
