@@ -268,3 +268,12 @@ See `PLAN.md` for the full plan and build order.
     `size` prop) replacing the old bordered single-letter badge used
     across all four apps' sidebar/header/login screens.
   - `npm run typecheck` and `npm test` (22/22) both clean.
+
+- 2026-09-24 — **Added `useIsMobile(breakpointPx = 768)` hook**, hand-rolled
+  on `window.matchMedia` + `useSyncExternalStore` (no new dependency — none
+  of the four consumer apps had one), exported from the package root
+  (`src/hooks/useIsMobile.ts`, re-exported via `src/index.ts`). Landed as
+  the shared prerequisite for adding responsive mobile layouts (matching
+  the "Car Wash Web Apps Mobile.dc.html" mock) to all four web apps — see
+  each app's own PROGRESS.md for its mobile-view entry. `npm test`
+  (25/25) and `tsc --noEmit` both clean.
