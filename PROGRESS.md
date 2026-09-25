@@ -305,3 +305,48 @@ See `PLAN.md` for the full plan and build order.
 
   `npm test` (32/32, incl. new `api/qrCodes.test.ts` and
   `components/QrCodeImage.test.tsx`) and `tsc --noEmit` both clean.
+
+- 2026-09-25 — **Fixed a real visual bug reported after testing**:
+  `QrCodeImage`'s QR rendered stretched into a non-square rectangle in
+  both consuming apps (admin's pool grid/detail panel, cabinet's sticker)
+  — every caller renders it inside a `display:flex` wrapper, and the
+  `<svg>` only had `width`/`height` HTML attributes, not CSS. Unlike
+  `<img>`, a plain SVG doesn't reliably keep its own aspect ratio under a
+  flex/grid ancestor's stretch behavior without an explicit CSS size, so
+  it silently deformed to fill whatever box it landed in. Fixed by also
+  setting `style={{width, height, aspectRatio:'1 / 1', flexShrink:0,
+  display:'block'}}` on the `<svg>` — CSS wins over the plain attributes
+  and is immune to any ancestor's layout. `npx tsc --noEmit` and `npm
+  test` (32/32) clean; verified in a real browser in both q-wash-admin
+  (grid thumbnail + detail-panel QR) and q-wash-cabinet (sticker QR) —
+  zoomed into the rendered sticker and confirmed all three finder-pattern
+  squares are now true squares, not rectangles.
+
+  **Follow-up, same day**: that fix was incomplete — it locked the SVG to
+  a caller-supplied pixel `size` (e.g. 280 in the admin detail panel), but
+  never checked whether that number actually fit the real, padded wrapper
+  (it didn't — ~256px available there), so the now-rigid square instead
+  overflowed its white card and looked off-center. Caught by the user
+  testing locally, not by my own earlier browser check, which only
+  confirmed squareness, not containment. Re-checked the design mock's own
+  markup directly (`grep 'svg width' qr_design.html`) — every real QR
+  there is `<svg width="100%">` with **no height attribute at all**,
+  sized entirely by its wrapper, never a hardcoded pixel value. Reworked
+  `QrCodeImage`: `size` is now optional — given, it sets width **and**
+  height explicitly (a definite box, safe inside a CSS Grid/flex item,
+  since a percentage width there turned out to confuse the grid's own
+  column-sizing the first time I tried switching every caller to 100% —
+  the pool grid overflowed the whole page horizontally, caught by testing
+  in a real browser before shipping it, not left for the user to catch a
+  third time); omitted, it fills 100% width with height deriving from the
+  SVG's own 1:1 viewBox aspect ratio (no CSS `aspectRatio` needed) — used
+  for wrappers that are already a definite standalone box (detail panel,
+  cabinet sticker), not a grid item. `npx tsc --noEmit`, `npm test`
+  (32/32, tests updated to match the new width/height-attribute
+  contract) clean. Verified for real again after this correction: no
+  horizontal overflow in the admin grid, the detail-panel QR contained
+  and centered, the cabinet sticker still square, and its "Скачать PNG"
+  actually produces a 192×192 PNG on disk (also switched that download
+  helper from `svg.width.baseVal.value` to `getBoundingClientRect()`,
+  since the former only reliably resolves a plain pixel width, not a
+  percentage one).
