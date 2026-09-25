@@ -400,3 +400,18 @@ See `PLAN.md` for the full plan and build order.
 
   `npx tsc --noEmit`, `npm test` (32/32) clean. All four web apps wired
   their logout call sites to it (see each app's own `PROGRESS.md`).
+
+- 2026-09-25 (same day) — Added the API client side of `q-wash-cabinet`'s
+  new "Отчёты" tab (see `q-wash-api`'s `PROGRESS.md` phase 10 and
+  `q-wash-cabinet`'s own entry for the backend/frontend halves): `Reports`/
+  `ReportsKPIs`/`ReportsBar`/`ReportsServiceRow`/`ReportsBoxRow`/
+  `ReportsPeriod` types in `api/types.ts`, and `getReports(washingPointId,
+  period)` in `api/queue.ts` (same file `getDisplayBoard` already lives
+  in — same kind of per-point `Queue`-driven aggregation), both re-exported
+  from `api/index.ts`/the package root the same way every other API surface
+  is. No dedicated unit test added for the one-line `getReports` wrapper —
+  matches the existing convention here (`getDisplayBoard`,
+  `listQueueNetworkWide`, etc. have none either; `client.test.ts` covers
+  the shared `apiRequest` plumbing they all go through).
+
+  `npx tsc --noEmit`, `npm test` (32/32) clean.

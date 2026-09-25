@@ -231,6 +231,57 @@ export interface DisplayBoard {
   waiting: DisplayBoardWaitingItem[];
 }
 
+// GET /washing-points/{id}/reports?period= — q-wash-cabinet's "Отчёты" tab.
+// staff/admin only, scoped to the caller's own washing point.
+export type ReportsPeriod = 'today' | 'week' | 'month';
+
+export interface ReportsKPIs {
+  revenue_cents: number;
+  revenue_delta_pct: number | null;
+  cars: number;
+  cars_delta: number | null;
+  avg_receipt_cents: number;
+  avg_receipt_delta_pct: number | null;
+  box_utilization_pct: number;
+  box_utilization_delta_pp: number | null;
+}
+
+// One bucket of the revenue series: one per hour (period=today, always 24)
+// or one per calendar day otherwise. timestamp is the bucket's start,
+// RFC3339 in the business timezone — deliberately not pre-formatted, same
+// convention QrCodePage's own scans_by_day already uses; format the
+// hour/weekday/day-of-month label client-side from it.
+export interface ReportsBar {
+  timestamp: string;
+  revenue_cents: number;
+  highlighted: boolean;
+}
+
+export interface ReportsServiceRow {
+  service_id: string;
+  name: string;
+  count: number;
+  revenue_cents: number;
+  share_pct: number;
+}
+
+export interface ReportsBoxRow {
+  number: number;
+  label: string;
+  cars: number;
+  revenue_cents: number;
+  load_pct: number;
+}
+
+export interface Reports {
+  period: ReportsPeriod;
+  range_label: string;
+  kpis: ReportsKPIs;
+  bars: ReportsBar[];
+  services: ReportsServiceRow[];
+  boxes: ReportsBoxRow[];
+}
+
 export type BookingStatus = 'queue' | 'waiting' | 'washing' | 'ready' | 'canceled';
 
 export interface Booking {

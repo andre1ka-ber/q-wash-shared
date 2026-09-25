@@ -1,5 +1,5 @@
 import { apiRequest } from './client';
-import type { BoardItemList, Booking, BookingStatusUpdate, DisplayBoard, LiveBoxList } from './types';
+import type { BoardItemList, Booking, BookingStatusUpdate, DisplayBoard, LiveBoxList, Reports, ReportsPeriod } from './types';
 
 // Admin-only when washingPointId is omitted — returns every point's live
 // board at once. staff/worker callers are always forced server-side to
@@ -43,6 +43,12 @@ export function resumeBooking(id: string): Promise<Booking> {
 // role). q-wash-display's one summary screen.
 export function getDisplayBoard(washingPointId: string): Promise<DisplayBoard> {
   return apiRequest<DisplayBoard>(`/washing-points/${washingPointId}/board`);
+}
+
+// GET /washing-points/{id}/reports?period= — staff/admin only, q-wash-cabinet's
+// "Отчёты" tab. period defaults to 'today' server-side when omitted.
+export function getReports(washingPointId: string, period: ReportsPeriod): Promise<Reports> {
+  return apiRequest<Reports>(`/washing-points/${washingPointId}/reports?period=${period}`);
 }
 
 // Reachable by the booking's own customer or by staff/worker/admin at its
