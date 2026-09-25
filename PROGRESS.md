@@ -359,3 +359,30 @@ See `PLAN.md` for the full plan and build order.
   unaffected. Needed by `q-wash-admin`'s `PointsPage` to open an edit
   drawer on row click (see its own `PROGRESS.md`). `npx tsc --noEmit`,
   `npm test` (32/32) clean.
+
+- 2026-09-25 (same day) — **`LogoMark` had the design backwards**: it
+  rendered a gold square with dark bars inside; the user pointed at the
+  actual Claude Design reference (the "queue bars" logo direction, active
+  lane in signal yellow) which is the opposite — a dark square
+  (`#191813`, `1px solid #31312B` border) with two gray bars and a gold
+  bottom bar. This matches the design mock's own sidebar-header markup for
+  this exact element (`Q Wash QR Codes.dc.html`), which a previous pass
+  apparently didn't check closely enough when this component was first
+  built. Fixed the three colors + added the border; geometry (size
+  ratios, gaps, corner radius) was already correct so left unchanged.
+  Used existing tokens where they matched exactly (`color.goldOnLight` for
+  the background, `color.textDim` for the top bar, `color.gold` for the
+  bottom bar); the middle bar's `#8A8778` has no existing token match and
+  is hardcoded, same as the mock itself does at this spot.
+
+  One shared component, used by all four web apps' sidebar/header and
+  login page — no per-app changes needed. `npx tsc --noEmit`, `npm test`
+  (32/32) clean in `q-wash-shared`; `npx tsc --noEmit` + tests also clean
+  in `q-wash-admin`, `q-wash-worker`, `q-wash-display`. Verified visually
+  in a real browser (not just read the code): `q-wash-admin`'s sidebar
+  header, its logged-out login page (larger size variant), and
+  `q-wash-cabinet`'s header — all three render the dark square with
+  gray/gray/gold bars, matching the reference image the user attached.
+  Did not spin up `q-wash-worker`/`q-wash-display`'s dev servers for a
+  visual check (same shared component, no per-app override exists to
+  diverge) — flagging in case that's wanted too.
