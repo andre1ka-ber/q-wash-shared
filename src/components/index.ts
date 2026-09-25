@@ -8,3 +8,5 @@ export { DataTable, DataTableHeaderRow, DataTableRow } from './DataTable';
 export { Toggle } from './Toggle';
 export { QrCodeImage } from './QrCodeImage';
 export type { QrCodeImageProps } from './QrCodeImage';
+export { ConfirmDialog } from './ConfirmDialog';
+export type { ConfirmDialogProps } from './ConfirmDialog';

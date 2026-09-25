@@ -386,3 +386,17 @@ See `PLAN.md` for the full plan and build order.
   Did not spin up `q-wash-worker`/`q-wash-display`'s dev servers for a
   visual check (same shared component, no per-app override exists to
   diverge) — flagging in case that's wanted too.
+
+- 2026-09-25 (same day) — **All logout buttons logged out immediately, no
+  confirmation** — user reported this across the web apps. Added a new
+  shared `ConfirmDialog` component (`components/ConfirmDialog.tsx`):
+  a small centered modal (same overlay/panel chrome as the existing
+  drawers — `rgba(8,6,8,.62)` backdrop, `panelAlt` background,
+  `borderStrong` border) with a title, optional message, and
+  Cancel/Confirm buttons (`GhostButton` + `DangerButton` by default,
+  since logout is disruptive; `danger={false}` swaps in `PrimaryButton`
+  for non-destructive confirmations). Generic, not logout-specific — any
+  app can reuse it for other "are you sure?" prompts.
+
+  `npx tsc --noEmit`, `npm test` (32/32) clean. All four web apps wired
+  their logout call sites to it (see each app's own `PROGRESS.md`).
