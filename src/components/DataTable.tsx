@@ -46,11 +46,13 @@ export interface DataTableRowProps {
   gridTemplateColumns: string;
   children: ReactNode;
   isLast?: boolean;
+  onClick?: () => void;
 }
 
-export function DataTableRow({ gridTemplateColumns, children, isLast }: DataTableRowProps) {
+export function DataTableRow({ gridTemplateColumns, children, isLast, onClick }: DataTableRowProps) {
   return (
     <div
+      onClick={onClick}
       style={{
         display: 'grid',
         gridTemplateColumns,
@@ -58,6 +60,7 @@ export function DataTableRow({ gridTemplateColumns, children, isLast }: DataTabl
         padding: '16px 20px',
         borderBottom: isLast ? 'none' : `1px solid ${color.rowBorder}`,
         alignItems: 'center',
+        cursor: onClick ? 'pointer' : undefined,
       }}
     >
       {children}

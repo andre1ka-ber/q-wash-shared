@@ -350,3 +350,12 @@ See `PLAN.md` for the full plan and build order.
   helper from `svg.width.baseVal.value` to `getBoundingClientRect()`,
   since the former only reliably resolves a plain pixel width, not a
   percentage one).
+
+- 2026-09-25 (same day) — Added an optional `onClick` prop to
+  `DataTableRow` (`components/DataTable.tsx`) so a consumer can make a
+  whole table row clickable (cursor:pointer follows automatically when
+  set). Additive only — every existing caller (`q-wash-admin`'s owners,
+  connection-requests, bookings, analytics pages) omits it and is
+  unaffected. Needed by `q-wash-admin`'s `PointsPage` to open an edit
+  drawer on row click (see its own `PROGRESS.md`). `npx tsc --noEmit`,
+  `npm test` (32/32) clean.
