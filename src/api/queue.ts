@@ -1,5 +1,17 @@
 import { apiRequest } from './client';
-import type { BoardItemList, Booking, BookingStatusUpdate, DisplayBoard, LiveBoxList, Reports, ReportsPeriod } from './types';
+import type {
+  AvailabilityList,
+  BoardItemList,
+  Booking,
+  BookingStatusUpdate,
+  DisplayBoard,
+  LiveBoxList,
+  ManualBookingCreate,
+  QueueDayItem,
+  QueueDayList,
+  Reports,
+  ReportsPeriod,
+} from './types';
 
 // Admin-only when washingPointId is omitted — returns every point's live
 // board at once. staff/worker callers are always forced server-side to
@@ -58,4 +70,28 @@ export function getReports(washingPointId: string, period: ReportsPeriod): Promi
 // no-show action.
 export function cancelBooking(id: string): Promise<Booking> {
   return apiRequest<Booking>(`/queue/${id}/cancel`, { method: 'PATCH' });
+}
+
+// GET /washing-points/{id}/queue/day?date=YYYY-MM-DD — staff/worker/admin at
+// this point. Every booking scheduled that calendar day (Asia/Dushanbe), any
+// status. q-wash-cabinet's "Очередь" tab.
+export function listQueueDay(washingPointId: string, date: string): Promise<QueueDayList> {
+  return apiRequest<QueueDayList>(`/washing-points/${washingPointId}/queue/day?date=${date}`);
+}
+
+// POST /washing-points/{id}/queue/manual — a staff-created walk-in booking.
+// The client is found-or-created by phone (required, E.164) server-side.
+export function createManualBooking(washingPointId: string, body: ManualBookingCreate): Promise<QueueDayItem> {
+  return apiRequest<QueueDayItem>(`/washing-points/${washingPointId}/queue/manual`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+}
+
+// GET /washing-points/{id}/availability — public. 15-minute candidate
+// windows for one service on one day with which boxes are free for each.
+export function getAvailability(washingPointId: string, serviceId: string, date: string): Promise<AvailabilityList> {
+  return apiRequest<AvailabilityList>(
+    `/washing-points/${washingPointId}/availability?service_id=${serviceId}&date=${date}`,
+  );
 }

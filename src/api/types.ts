@@ -282,7 +282,7 @@ export interface Reports {
   boxes: ReportsBoxRow[];
 }
 
-export type BookingStatus = 'queue' | 'waiting' | 'washing' | 'ready' | 'canceled';
+export type BookingStatus = 'queue' | 'waiting' | 'washing' | 'ready' | 'canceled' | 'no_show';
 
 export interface Booking {
   id: string;
@@ -301,8 +301,58 @@ export interface Booking {
   cars_ahead: number;
 }
 
+// 'queue' is the cabinet's "Вернуть в очередь" (restore from canceled/no_show);
+// 'no_show' is the cabinet's "Не приехал".
 export interface BookingStatusUpdate {
-  status: 'waiting' | 'washing' | 'ready';
+  status: 'queue' | 'waiting' | 'washing' | 'ready' | 'no_show';
+}
+
+export type BookingSource = 'app' | 'qr' | 'manual';
+
+// One row of GET /washing-points/{id}/queue/day and the 201 body of
+// POST /washing-points/{id}/queue/manual — staff-only detail (full phone,
+// plate, price) unlike the public BoardItem.
+export interface QueueDayItem {
+  id: string;
+  status: BookingStatus;
+  ticket: string;
+  box_number: number;
+  scheduled_start_at: string;
+  scheduled_end_at: string;
+  paused_at?: string | null;
+  source: BookingSource;
+  car_name: string;
+  plate?: string;
+  client_name?: string;
+  client_phone: string;
+  service_name: string;
+  price_option_name: string;
+  price_cents: number;
+}
+
+export interface QueueDayList {
+  items: QueueDayItem[];
+}
+
+export interface ManualBookingCreate {
+  service_id: string;
+  price_option_id: string;
+  box_number: number;
+  scheduled_start_at: string;
+  car_name: string;
+  plate?: string;
+  client_phone: string;
+  client_name?: string;
+}
+
+export interface AvailabilitySlot {
+  start: string;
+  end: string;
+  available_boxes: number[];
+}
+
+export interface AvailabilityList {
+  items: AvailabilitySlot[];
 }
 
 export interface PriceOption {

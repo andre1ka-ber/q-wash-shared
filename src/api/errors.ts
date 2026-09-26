@@ -22,6 +22,12 @@ const RU_ERROR_MESSAGES: Record<string, string> = {
   cannot_cancel: 'Запись можно снять только до начала мойки',
   invalid_status_transition: 'Не удалось изменить статус записи',
   queue_not_found: 'Запись не найдена — возможно, её уже обработали',
+  slot_unavailable: 'Это время уже занято — выберите другое',
+  active_booking_exists: 'У клиента уже есть активная запись',
+  phone_not_customer: 'Этот номер принадлежит сотруднику, а не клиенту',
+  box_closed: 'Этот бокс сейчас закрыт',
+  outside_operating_hours: 'Это время вне часов работы мойки',
+  invalid_phone_number: 'Введите телефон в формате +992XXXXXXXXX',
 };
 
 export class ApiError extends Error {

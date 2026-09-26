@@ -415,3 +415,14 @@ See `PLAN.md` for the full plan and build order.
   the shared `apiRequest` plumbing they all go through).
 
   `npx tsc --noEmit`, `npm test` (32/32) clean.
+
+- 2026-09-26 — Cabinet "Очередь" support: `BookingStatus` gains `no_show`,
+  `BookingStatusUpdate.status` gains `queue`/`no_show`, new types
+  `QueueDayItem`/`QueueDayList`/`ManualBookingCreate`/`BookingSource`/
+  `AvailabilitySlot`/`AvailabilityList`, and API fns `listQueueDay`,
+  `createManualBooking`, `getAvailability` (all re-exported from the package
+  root). Added Russian messages for `slot_unavailable`,
+  `active_booking_exists`, `phone_not_customer`, `box_closed`,
+  `outside_operating_hours`, `invalid_phone_number`. `queue.test.ts` covers
+  the new wrappers. `tsc --noEmit` and `npm test` (36/36) clean;
+  q-wash-admin/worker/display/cabinet still typecheck and pass their tests.

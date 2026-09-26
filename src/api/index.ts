@@ -14,6 +14,9 @@ export {
   pauseBooking,
   resumeBooking,
   cancelBooking,
+  listQueueDay,
+  createManualBooking,
+  getAvailability,
 } from './queue';
 export { createWashingPoint, getWashingPoint, updateWashingPoint } from './washingPoints';
 export {
@@ -77,6 +80,12 @@ export type {
   BookingStatus,
   Booking,
   BookingStatusUpdate,
+  BookingSource,
+  QueueDayItem,
+  QueueDayList,
+  ManualBookingCreate,
+  AvailabilitySlot,
+  AvailabilityList,
   PriceOption,
   PriceOptionInput,
   Service,
