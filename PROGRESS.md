@@ -428,3 +428,5 @@ See `PLAN.md` for the full plan and build order.
   q-wash-admin/worker/display/cabinet still typecheck and pass their tests.
 
 - 2026-09-26 — `ManualBookingCreate.car_name` is now optional (only `client_phone` is required); `invalid_phone_number` message no longer demands the country code.
+
+- 2026-09-26 — Test review: added `api/endpoints.test.ts` (pins method/path/body of the services, boxes, schedule, owners, washing-points, admin, photos and connection-request wrappers, incl. multipart upload) and `auth/tokenStorage.test.ts` — 68 tests total. Component tests (ConfirmDialog, Toggle) would need `@testing-library/react` as a devDependency here; they are exercised through the apps' tests instead.
