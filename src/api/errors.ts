@@ -27,7 +27,7 @@ const RU_ERROR_MESSAGES: Record<string, string> = {
   phone_not_customer: 'Этот номер принадлежит сотруднику, а не клиенту',
   box_closed: 'Этот бокс сейчас закрыт',
   outside_operating_hours: 'Это время вне часов работы мойки',
-  invalid_phone_number: 'Введите телефон в формате +992XXXXXXXXX',
+  invalid_phone_number: 'Введите телефон, например 90 123 45 67 или +992901234567',
 };
 
 export class ApiError extends Error {

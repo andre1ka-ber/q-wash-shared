@@ -426,3 +426,5 @@ See `PLAN.md` for the full plan and build order.
   `outside_operating_hours`, `invalid_phone_number`. `queue.test.ts` covers
   the new wrappers. `tsc --noEmit` and `npm test` (36/36) clean;
   q-wash-admin/worker/display/cabinet still typecheck and pass their tests.
+
+- 2026-09-26 — `ManualBookingCreate.car_name` is now optional (only `client_phone` is required); `invalid_phone_number` message no longer demands the country code.

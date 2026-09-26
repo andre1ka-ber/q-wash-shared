@@ -339,7 +339,7 @@ export interface ManualBookingCreate {
   price_option_id: string;
   box_number: number;
   scheduled_start_at: string;
-  car_name: string;
+  car_name?: string;
   plate?: string;
   client_phone: string;
   client_name?: string;
