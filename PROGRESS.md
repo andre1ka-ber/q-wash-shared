@@ -430,3 +430,17 @@ See `PLAN.md` for the full plan and build order.
 - 2026-09-26 — `ManualBookingCreate.car_name` is now optional (only `client_phone` is required); `invalid_phone_number` message no longer demands the country code.
 
 - 2026-09-26 — Test review: added `api/endpoints.test.ts` (pins method/path/body of the services, boxes, schedule, owners, washing-points, admin, photos and connection-request wrappers, incl. multipart upload) and `auth/tokenStorage.test.ts` — 68 tests total. Component tests (ConfirmDialog, Toggle) would need `@testing-library/react` as a devDependency here; they are exercised through the apps' tests instead.
+
+- 2026-09-28 — **Sentry error monitoring, shared half** (see platform-level
+  `plan-sentry.md`/`progress-sentry.md`). Added `@sentry/react` (`^11.0.0`)
+  and new `src/monitoring/` module: `initSentry({ dsn, environment, release })`
+  — a no-op when `dsn` is empty/undefined (no Sentry project exists yet, and
+  local dev never sends anything), otherwise calls `Sentry.init` once;
+  re-exports `ErrorBoundary` so each app can wrap its root component. Dropped
+  `sendDefaultPii` from the `Sentry.init` call — it's a Node-only
+  `ServerRuntimeOptions` field, not present on the browser SDK's
+  `BrowserOptions` type at all (caught by `tsc --noEmit`, not guessed); the
+  browser SDK already omits IP/cookies by default. 3 new tests
+  (`monitoring/sentry.test.ts`, mocking `@sentry/react`): no-DSN no-op,
+  init called with the right options when a DSN is set, only-once guard.
+  `npx tsc --noEmit` and `npm test` (71/71) both clean.
