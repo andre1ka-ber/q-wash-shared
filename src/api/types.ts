@@ -76,6 +76,8 @@ export interface AdminWashingPoint {
   status: WashingPointStatus;
   boxes_count: number;
   services_count: number;
+  /** Relative "/uploads/..." URL; resolve with resolveApiAssetUrl before rendering. Absent if the point has no photos yet. */
+  cover_url?: string | null;
   created_at: string;
 }
 

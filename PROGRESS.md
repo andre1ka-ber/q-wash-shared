@@ -444,3 +444,5 @@ See `PLAN.md` for the full plan and build order.
   (`monitoring/sentry.test.ts`, mocking `@sentry/react`): no-DSN no-op,
   init called with the right options when a DSN is set, only-once guard.
   `npx tsc --noEmit` and `npm test` (71/71) both clean.
+
+- 2026-09-29 — Added optional `cover_url` to `AdminWashingPoint` (`api/types.ts`), following `q-wash-api`'s new field on `GET /admin/washing-points` (batch-fetched cover photo per point). Resolve it with the existing `resolveApiAssetUrl` before rendering — it's the same relative `"/uploads/..."` shape every other photo/QR-thumbnail URL already needs resolved against the API's origin. `npx tsc --noEmit` and `npm test` (71/71) clean.
