@@ -5,7 +5,8 @@ export type UserRole = 'customer' | 'staff' | 'admin' | 'worker';
 
 export interface User {
   id: string;
-  phone_number: string;
+  /** Omitted/null for staff, worker, and admin accounts — only customers have one. */
+  phone_number: string | null;
   name: string | null;
   role: UserRole;
   washing_point_id: string | null;
@@ -51,6 +52,33 @@ export interface WashingPoint {
   // sent as null/[] — treat as possibly absent, not just possibly null.
   description?: string;
   amenities?: string[];
+}
+
+export interface Credential {
+  username: string;
+  password: string;
+}
+
+/**
+ * A washing point's auto-provisioned staff+worker logins, plaintext
+ * password included. Only ever appears in the response that just created
+ * them (createWashingPoint, or approving a connection request) — never
+ * retrievable again afterward. See resetWashingPointCredentials for
+ * re-issuing a lost one.
+ */
+export interface PointAccounts {
+  staff: Credential;
+  worker: Credential;
+}
+
+/** createWashingPoint's actual response shape — see PointAccounts. */
+export interface WashingPointCreated extends WashingPoint {
+  credentials: PointAccounts;
+}
+
+export interface WashingPointCredentialUsernames {
+  staff: { username: string };
+  worker: { username: string };
 }
 
 export interface WashingPointUpdate {
@@ -137,6 +165,15 @@ export interface ConnectionRequest {
 
 export interface ConnectionRequestList {
   items: ConnectionRequest[];
+}
+
+/**
+ * reviewConnectionRequest's actual response shape: credentials is present
+ * only when the review approved the request (a new washing point, and its
+ * staff+worker logins, only get created on approval) — see PointAccounts.
+ */
+export interface ConnectionRequestReviewed extends ConnectionRequest {
+  credentials?: PointAccounts;
 }
 
 export interface ConnectionRequestCreate {

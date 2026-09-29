@@ -18,7 +18,13 @@ export {
   createManualBooking,
   getAvailability,
 } from './queue';
-export { createWashingPoint, getWashingPoint, updateWashingPoint } from './washingPoints';
+export {
+  createWashingPoint,
+  getWashingPoint,
+  updateWashingPoint,
+  getWashingPointCredentials,
+  resetWashingPointCredentials,
+} from './washingPoints';
 export {
   listServices,
   createService,
@@ -48,7 +54,11 @@ export type {
   WashingPointStatus,
   WashingPoint,
   WashingPointCreate,
+  WashingPointCreated,
   WashingPointUpdate,
+  WashingPointCredentialUsernames,
+  Credential,
+  PointAccounts,
   AdminWashingPoint,
   AdminWashingPointList,
   AdminStats,
@@ -61,6 +71,7 @@ export type {
   ConnectionRequestList,
   ConnectionRequestCreate,
   ConnectionRequestReview,
+  ConnectionRequestReviewed,
   BoardItemStatus,
   BoardItem,
   BoardItemList,

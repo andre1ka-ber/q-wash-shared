@@ -4,6 +4,7 @@ import type {
   ConnectionRequestCreate,
   ConnectionRequestList,
   ConnectionRequestReview,
+  ConnectionRequestReviewed,
   ConnectionRequestStatus,
 } from './types';
 
@@ -16,11 +17,13 @@ export function createConnectionRequest(body: ConnectionRequestCreate): Promise<
   return apiRequest<ConnectionRequest>('/connection-requests', { method: 'POST', body: JSON.stringify(body) });
 }
 
+// Approving (not rejecting) also auto-provisions the new point's
+// staff+worker logins — see ConnectionRequestReviewed.credentials.
 export function reviewConnectionRequest(
   id: string,
   review: ConnectionRequestReview,
-): Promise<ConnectionRequest> {
-  return apiRequest<ConnectionRequest>(`/connection-requests/${id}`, {
+): Promise<ConnectionRequestReviewed> {
+  return apiRequest<ConnectionRequestReviewed>(`/connection-requests/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(review),
   });

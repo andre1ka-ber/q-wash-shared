@@ -6,7 +6,13 @@ import { createOwner, listOwners, updateOwner } from './owners';
 import { deletePhoto, listPhotos, updatePhoto, uploadPhoto } from './photos';
 import { getSchedule, replaceSchedule } from './schedule';
 import { createPriceOption, createService, deactivateService, deletePriceOption, listServices, updatePriceOption, updateService } from './services';
-import { createWashingPoint, getWashingPoint, updateWashingPoint } from './washingPoints';
+import {
+  createWashingPoint,
+  getWashingPoint,
+  getWashingPointCredentials,
+  resetWashingPointCredentials,
+  updateWashingPoint,
+} from './washingPoints';
 
 // These wrappers are thin, so the value of testing them is pinning the
 // contract with q-wash-api (docs/API.md): method, path and body per call. A
@@ -68,6 +74,8 @@ const cases: Case[] = [
 
   { name: 'listAdminWashingPoints', call: () => listAdminWashingPoints(), method: 'GET', path: '/admin/washing-points' },
   { name: 'getAdminStats', call: () => getAdminStats(), method: 'GET', path: '/admin/stats' },
+  { name: 'getWashingPointCredentials', call: () => getWashingPointCredentials('wp'), method: 'GET', path: '/admin/washing-points/wp/credentials' },
+  { name: 'resetWashingPointCredentials', call: () => resetWashingPointCredentials('wp', 'staff'), method: 'POST', path: '/admin/washing-points/wp/credentials/staff/reset' },
 
   { name: 'listPhotos', call: () => listPhotos('wp'), method: 'GET', path: '/washing-points/wp/photos' },
   { name: 'updatePhoto', call: () => updatePhoto('wp', 'ph1', { is_cover: true }), method: 'PATCH', path: '/washing-points/wp/photos/ph1', body: { is_cover: true } },
