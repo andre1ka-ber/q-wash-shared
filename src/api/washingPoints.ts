@@ -26,14 +26,17 @@ export function updateWashingPoint(id: string, body: WashingPointUpdate): Promis
   return apiRequest<WashingPoint>(`/washing-points/${id}`, { method: 'PATCH', body: JSON.stringify(body) });
 }
 
-// Admin-only. Usernames only — passwords are never retrievable after the
-// one-time reveal at creation/reset.
+// staff/admin; staff may only act on their own point (see openapi.yaml) —
+// used by both q-wash-admin (any point) and q-wash-cabinet (own point's
+// "Безопасность" tab). Usernames only — passwords are never retrievable
+// after the one-time reveal at creation/reset.
 export function getWashingPointCredentials(id: string): Promise<WashingPointCredentialUsernames> {
-  return apiRequest<WashingPointCredentialUsernames>(`/admin/washing-points/${id}/credentials`);
+  return apiRequest<WashingPointCredentialUsernames>(`/washing-points/${id}/credentials`);
 }
 
-// Admin-only. Regenerates role's ("staff" | "worker") password and revokes
-// its existing sessions; returns the new plaintext password once.
+// staff/admin, same own-point restriction as above. Regenerates role's
+// ("staff" | "worker") password and revokes its existing sessions; returns
+// the new plaintext password once.
 export function resetWashingPointCredentials(id: string, role: 'staff' | 'worker'): Promise<Credential> {
-  return apiRequest<Credential>(`/admin/washing-points/${id}/credentials/${role}/reset`, { method: 'POST' });
+  return apiRequest<Credential>(`/washing-points/${id}/credentials/${role}/reset`, { method: 'POST' });
 }

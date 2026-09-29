@@ -74,8 +74,8 @@ const cases: Case[] = [
 
   { name: 'listAdminWashingPoints', call: () => listAdminWashingPoints(), method: 'GET', path: '/admin/washing-points' },
   { name: 'getAdminStats', call: () => getAdminStats(), method: 'GET', path: '/admin/stats' },
-  { name: 'getWashingPointCredentials', call: () => getWashingPointCredentials('wp'), method: 'GET', path: '/admin/washing-points/wp/credentials' },
-  { name: 'resetWashingPointCredentials', call: () => resetWashingPointCredentials('wp', 'staff'), method: 'POST', path: '/admin/washing-points/wp/credentials/staff/reset' },
+  { name: 'getWashingPointCredentials', call: () => getWashingPointCredentials('wp'), method: 'GET', path: '/washing-points/wp/credentials' },
+  { name: 'resetWashingPointCredentials', call: () => resetWashingPointCredentials('wp', 'staff'), method: 'POST', path: '/washing-points/wp/credentials/staff/reset' },
 
   { name: 'listPhotos', call: () => listPhotos('wp'), method: 'GET', path: '/washing-points/wp/photos' },
   { name: 'updatePhoto', call: () => updatePhoto('wp', 'ph1', { is_cover: true }), method: 'PATCH', path: '/washing-points/wp/photos/ph1', body: { is_cover: true } },

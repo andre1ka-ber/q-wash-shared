@@ -10,3 +10,5 @@ export { QrCodeImage } from './QrCodeImage';
 export type { QrCodeImageProps } from './QrCodeImage';
 export { ConfirmDialog } from './ConfirmDialog';
 export type { ConfirmDialogProps } from './ConfirmDialog';
+export { CredentialsRevealModal } from './CredentialsRevealModal';
+export type { CredentialsRevealItem, CredentialsRevealModalProps } from './CredentialsRevealModal';
