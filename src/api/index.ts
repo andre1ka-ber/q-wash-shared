@@ -1,6 +1,6 @@
 export { apiRequest, resolveApiAssetUrl } from './client';
 export { ApiError } from './errors';
-export { loginWithPassword, logout, getMe } from './auth';
+export { loginWithPassword, changeOwnPassword, logout, getMe } from './auth';
 export { listAdminWashingPoints, getAdminStats } from './admin';
 export { listOwners, createOwner, updateOwner } from './owners';
 export { listConnectionRequests, createConnectionRequest, reviewConnectionRequest } from './connectionRequests';

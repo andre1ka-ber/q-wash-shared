@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { getAdminStats, listAdminWashingPoints } from './admin';
+import { changeOwnPassword } from './auth';
 import { listBoxes, createBox, updateBox, deleteBox } from './boxes';
 import { createConnectionRequest, listConnectionRequests, reviewConnectionRequest } from './connectionRequests';
 import { createOwner, listOwners, updateOwner } from './owners';
@@ -80,6 +81,8 @@ const cases: Case[] = [
   { name: 'listPhotos', call: () => listPhotos('wp'), method: 'GET', path: '/washing-points/wp/photos' },
   { name: 'updatePhoto', call: () => updatePhoto('wp', 'ph1', { is_cover: true }), method: 'PATCH', path: '/washing-points/wp/photos/ph1', body: { is_cover: true } },
   { name: 'deletePhoto', call: () => deletePhoto('wp', 'ph1'), method: 'DELETE', path: '/washing-points/wp/photos/ph1', status: 204 },
+
+  { name: 'changeOwnPassword', call: () => changeOwnPassword('old-pass', 'New-pass1'), method: 'PATCH', path: '/auth/password', body: { current_password: 'old-pass', new_password: 'New-pass1' } },
 
   { name: 'createConnectionRequest', call: () => createConnectionRequest({ business_name: 'B', contact_name: 'C', contact_phone: '+1', address: 'A', boxes_count: 1 }), method: 'POST', path: '/connection-requests', body: { business_name: 'B', contact_name: 'C', contact_phone: '+1', address: 'A', boxes_count: 1 } },
 ];
