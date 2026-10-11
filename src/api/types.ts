@@ -413,6 +413,7 @@ export interface Service {
   name: string;
   description: string | null;
   duration_minutes: number;
+  queue_minutes: number | null;
   picture_url: string | null;
   is_active: boolean;
   price_options: PriceOption[];
@@ -426,6 +427,7 @@ export interface ServiceCreate {
   name: string;
   description?: string;
   duration_minutes: number;
+  queue_minutes?: number;
   picture_url?: string;
   price_options: PriceOptionInput[];
 }
@@ -434,6 +436,8 @@ export interface ServiceUpdate {
   name?: string;
   description?: string;
   duration_minutes?: number;
+  /** 0 clears the override so the queue falls back to duration_minutes. */
+  queue_minutes?: number;
   picture_url?: string;
   is_active?: boolean;
 }
