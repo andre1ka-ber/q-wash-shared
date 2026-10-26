@@ -89,9 +89,10 @@ export function createManualBooking(washingPointId: string, body: ManualBookingC
 }
 
 // GET /washing-points/{id}/availability — public. 15-minute candidate
-// windows for one service on one day with which boxes are free for each.
-export function getAvailability(washingPointId: string, serviceId: string, date: string): Promise<AvailabilityList> {
-  return apiRequest<AvailabilityList>(
-    `/washing-points/${washingPointId}/availability?service_id=${serviceId}&date=${date}`,
-  );
+// windows on one day with which boxes are free for each, sized for the
+// services' summed duration. A single id uses the original service_id param.
+export function getAvailability(washingPointId: string, serviceIds: string | string[], date: string): Promise<AvailabilityList> {
+  const ids = Array.isArray(serviceIds) ? serviceIds : [serviceIds];
+  const param = ids.length === 1 ? `service_id=${ids[0]}` : `service_ids=${ids.join(',')}`;
+  return apiRequest<AvailabilityList>(`/washing-points/${washingPointId}/availability?${param}&date=${date}`);
 }

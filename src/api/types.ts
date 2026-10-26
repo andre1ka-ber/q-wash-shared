@@ -323,6 +323,13 @@ export interface Reports {
 
 export type BookingStatus = 'queue' | 'waiting' | 'washing' | 'ready' | 'canceled' | 'no_show';
 
+// One service of a booking. A booking's top-level service_id /
+// price_option_id mirror its first item.
+export interface BookingItem {
+  service_id: string;
+  price_option_id: string;
+}
+
 export interface Booking {
   id: string;
   status: BookingStatus;
@@ -330,6 +337,7 @@ export interface Booking {
   car_id: string;
   service_id: string;
   price_option_id: string;
+  items: BookingItem[];
   washing_point_id: string;
   box_number: number;
   scheduled_start_at: string;
@@ -364,7 +372,19 @@ export interface QueueDayItem {
   plate?: string;
   client_name?: string;
   client_phone: string;
+  // service_name joins every service's name; price_option_name is only set
+  // for a single-service booking; price_cents is the total. items is the
+  // per-service breakdown.
   service_name: string;
+  price_option_name: string;
+  price_cents: number;
+  items: QueueDayLine[];
+}
+
+export interface QueueDayLine {
+  service_id: string;
+  service_name: string;
+  price_option_id: string;
   price_option_name: string;
   price_cents: number;
 }
@@ -374,8 +394,7 @@ export interface QueueDayList {
 }
 
 export interface ManualBookingCreate {
-  service_id: string;
-  price_option_id: string;
+  items: BookingItem[];
   box_number: number;
   scheduled_start_at: string;
   car_name?: string;

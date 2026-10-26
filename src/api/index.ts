@@ -94,6 +94,8 @@ export type {
   BookingStatusUpdate,
   BookingSource,
   QueueDayItem,
+  QueueDayLine,
+  BookingItem,
   QueueDayList,
   ManualBookingCreate,
   AvailabilitySlot,
