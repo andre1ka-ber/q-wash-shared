@@ -473,6 +473,15 @@ export interface PhotoList {
   items: Photo[];
 }
 
+export interface BookingPhoto {
+  id: string;
+  url: string;
+}
+
+export interface BookingPhotoList {
+  items: BookingPhoto[];
+}
+
 export interface PhotoUpdate {
   is_cover?: boolean;
   sort_order?: number;

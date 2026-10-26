@@ -5,6 +5,7 @@ import { listBoxes, createBox, updateBox, deleteBox } from './boxes';
 import { createConnectionRequest, listConnectionRequests, reviewConnectionRequest } from './connectionRequests';
 import { createOwner, listOwners, updateOwner } from './owners';
 import { deletePhoto, listPhotos, updatePhoto, uploadPhoto } from './photos';
+import { deleteBookingPhoto, listBookingPhotos, uploadBookingPhoto } from './bookingPhotos';
 import { getSchedule, replaceSchedule } from './schedule';
 import { createPriceOption, createService, deactivateService, deletePriceOption, listServices, updatePriceOption, updateService } from './services';
 import {
@@ -82,6 +83,9 @@ const cases: Case[] = [
   { name: 'updatePhoto', call: () => updatePhoto('wp', 'ph1', { is_cover: true }), method: 'PATCH', path: '/washing-points/wp/photos/ph1', body: { is_cover: true } },
   { name: 'deletePhoto', call: () => deletePhoto('wp', 'ph1'), method: 'DELETE', path: '/washing-points/wp/photos/ph1', status: 204 },
 
+  { name: 'listBookingPhotos', call: () => listBookingPhotos('b1'), method: 'GET', path: '/queue/b1/photos' },
+  { name: 'deleteBookingPhoto', call: () => deleteBookingPhoto('b1', 'ph1'), method: 'DELETE', path: '/queue/b1/photos/ph1', status: 204 },
+
   { name: 'changeOwnPassword', call: () => changeOwnPassword('old-pass', 'New-pass1'), method: 'PATCH', path: '/auth/password', body: { current_password: 'old-pass', new_password: 'New-pass1' } },
 
   { name: 'createConnectionRequest', call: () => createConnectionRequest({ business_name: 'B', contact_name: 'C', contact_phone: '+1', address: 'A', boxes_count: 1 }), method: 'POST', path: '/connection-requests', body: { business_name: 'B', contact_name: 'C', contact_phone: '+1', address: 'A', boxes_count: 1 } },
@@ -113,6 +117,18 @@ describe('q-wash-api endpoint wrappers', () => {
     expect(req.method).toBe('PATCH');
     expect(req.path).toBe('/connection-requests/cr1');
     expect(JSON.parse(req.body as string)).toEqual({ status: 'approved' });
+  });
+
+  it('uploadBookingPhoto sends multipart form data with just the file', async () => {
+    const fetchMock = stubFetch(201, { id: 'ph1' });
+    await uploadBookingPhoto('b1', new File(['x'], 'car.jpg', { type: 'image/jpeg' }));
+
+    const req = lastCall(fetchMock);
+    expect(req.method).toBe('POST');
+    expect(req.path).toBe('/queue/b1/photos');
+    const form = req.body as FormData;
+    expect((form.get('file') as File).name).toBe('car.jpg');
+    expect(form.has('is_cover')).toBe(false);
   });
 
   it('uploadPhoto sends multipart form data with the file and the cover flag', async () => {

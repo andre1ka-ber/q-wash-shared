@@ -36,6 +36,7 @@ export {
 } from './services';
 export { getSchedule, replaceSchedule } from './schedule';
 export { listPhotos, uploadPhoto, updatePhoto, deletePhoto } from './photos';
+export { listBookingPhotos, uploadBookingPhoto, deleteBookingPhoto } from './bookingPhotos';
 export { listBoxes, createBox, updateBox, deleteBox } from './boxes';
 export {
   generateQrCodes,
@@ -106,6 +107,8 @@ export type {
   Photo,
   PhotoList,
   PhotoUpdate,
+  BookingPhoto,
+  BookingPhotoList,
   ScheduleRow,
   ScheduleList,
   Box,
