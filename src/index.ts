@@ -5,3 +5,4 @@ export * from './components';
 export * from './sse/client';
 export * from './hooks/useIsMobile';
 export * from './monitoring';
+export * from './pwa/updates';
