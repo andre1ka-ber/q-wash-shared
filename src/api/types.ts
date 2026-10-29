@@ -76,9 +76,10 @@ export interface WashingPointCreated extends WashingPoint {
   credentials: PointAccounts;
 }
 
+/** A role the point has no login account for is null (see createWashingPointCredentials). */
 export interface WashingPointCredentialUsernames {
-  staff: { username: string };
-  worker: { username: string };
+  staff: { username: string } | null;
+  worker: { username: string } | null;
 }
 
 export interface WashingPointUpdate {

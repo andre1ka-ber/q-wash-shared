@@ -12,6 +12,7 @@ import {
   createWashingPoint,
   getWashingPoint,
   getWashingPointCredentials,
+  createWashingPointCredentials,
   resetWashingPointCredentials,
   updateWashingPoint,
 } from './washingPoints';
@@ -77,6 +78,7 @@ const cases: Case[] = [
   { name: 'listAdminWashingPoints', call: () => listAdminWashingPoints(), method: 'GET', path: '/admin/washing-points' },
   { name: 'getAdminStats', call: () => getAdminStats(), method: 'GET', path: '/admin/stats' },
   { name: 'getWashingPointCredentials', call: () => getWashingPointCredentials('wp'), method: 'GET', path: '/washing-points/wp/credentials' },
+  { name: 'createWashingPointCredentials', call: () => createWashingPointCredentials('wp', 'worker'), method: 'POST', path: '/washing-points/wp/credentials/worker' },
   { name: 'resetWashingPointCredentials', call: () => resetWashingPointCredentials('wp', 'staff'), method: 'POST', path: '/washing-points/wp/credentials/staff/reset' },
 
   { name: 'listPhotos', call: () => listPhotos('wp'), method: 'GET', path: '/washing-points/wp/photos' },

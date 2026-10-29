@@ -37,6 +37,11 @@ export function getWashingPointCredentials(id: string): Promise<WashingPointCred
 // staff/admin, same own-point restriction as above. Regenerates role's
 // ("staff" | "worker") password and revokes its existing sessions; returns
 // the new plaintext password once.
+/** Creates the staff/worker login a point is missing; the password is shown once. */
+export function createWashingPointCredentials(id: string, role: 'staff' | 'worker'): Promise<Credential> {
+  return apiRequest<Credential>(`/washing-points/${id}/credentials/${role}`, { method: 'POST' });
+}
+
 export function resetWashingPointCredentials(id: string, role: 'staff' | 'worker'): Promise<Credential> {
   return apiRequest<Credential>(`/washing-points/${id}/credentials/${role}/reset`, { method: 'POST' });
 }

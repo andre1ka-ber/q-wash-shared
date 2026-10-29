@@ -23,6 +23,7 @@ export {
   getWashingPoint,
   updateWashingPoint,
   getWashingPointCredentials,
+  createWashingPointCredentials,
   resetWashingPointCredentials,
 } from './washingPoints';
 export {

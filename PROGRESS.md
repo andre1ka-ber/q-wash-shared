@@ -458,3 +458,5 @@ See `PLAN.md` for the full plan and build order.
 - 2026-10-26 — New `startPwaUpdates(registerSW, intervalMs?)` (`pwa/updates.ts`): registers the service worker and re-checks for a new one hourly and whenever the app becomes visible again, so long-lived tabs and phone apps resumed from the background pick up deploys. Each web app passes its own `registerSW` from `virtual:pwa-register` (this package doesn't depend on the plugin). `tsc --noEmit` and `vitest run` (83/83) clean.
 
 - 2026-10-26 — Multi-service bookings: `Booking.items` / `BookingItem`, `QueueDayItem.items` / `QueueDayLine` (required), `ManualBookingCreate.items` replaces the single `service_id`/`price_option_id`; `getAvailability` takes `string | string[]` (one id keeps the `service_id=` param, several use `service_ids=a,b`). Worker/display need no change — their `service_name` fields now carry the comma-joined names. `tsc --noEmit` and `vitest run` (84/84) clean.
+- 2026-10-29 — `WashingPointCredentialUsernames` fields are nullable; added `createWashingPointCredentials`
+  (`POST /washing-points/{id}/credentials/{role}`) with an endpoint test.
