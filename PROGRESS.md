@@ -460,3 +460,6 @@ See `PLAN.md` for the full plan and build order.
 - 2026-10-26 — Multi-service bookings: `Booking.items` / `BookingItem`, `QueueDayItem.items` / `QueueDayLine` (required), `ManualBookingCreate.items` replaces the single `service_id`/`price_option_id`; `getAvailability` takes `string | string[]` (one id keeps the `service_id=` param, several use `service_ids=a,b`). Worker/display need no change — their `service_name` fields now carry the comma-joined names. `tsc --noEmit` and `vitest run` (84/84) clean.
 - 2026-10-29 — `WashingPointCredentialUsernames` fields are nullable; added `createWashingPointCredentials`
   (`POST /washing-points/{id}/credentials/{role}`) with an endpoint test.
+
+- 2026-11-04 — Overflow box support: `QueueDayItem.is_overflow?` / `BoardItem.is_overflow?`, `ManualBookingCreate.overflow?` (+ `box_number`
+  now optional), new `getOverflowSlots` (`GET /washing-points/{id}/queue/overflow-slots`, staff). Test added to `queue.test.ts`.

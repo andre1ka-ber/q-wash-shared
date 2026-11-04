@@ -201,6 +201,9 @@ export interface BoardItem {
   paused_at?: string;
   customer_phone_last4: string;
   car_name?: string;
+  // Overflow ("Вне очереди") booking, box_number 0. Only staff-facing lists
+  // (the worker's point queue) include these.
+  is_overflow?: boolean;
 }
 
 export interface BoardItemList {
@@ -364,7 +367,11 @@ export interface QueueDayItem {
   id: string;
   status: BookingStatus;
   ticket: string;
+  // 0 for overflow bookings (the virtual "Вне очереди" box).
   box_number: number;
+  // Booking in the point's virtual out-of-queue box: ignores box capacity,
+  // its time is only the expected arrival, hidden from customers.
+  is_overflow?: boolean;
   scheduled_start_at: string;
   scheduled_end_at: string;
   paused_at?: string | null;
@@ -396,7 +403,9 @@ export interface QueueDayList {
 
 export interface ManualBookingCreate {
   items: BookingItem[];
-  box_number: number;
+  // Ignored (and may be omitted) when overflow is true.
+  box_number?: number;
+  overflow?: boolean;
   scheduled_start_at: string;
   car_name?: string;
   plate?: string;

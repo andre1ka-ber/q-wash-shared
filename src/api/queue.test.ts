@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createManualBooking, getAvailability, listQueueDay, updateBookingStatus } from './queue';
+import { createManualBooking, getAvailability, getOverflowSlots, listQueueDay, updateBookingStatus } from './queue';
 
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -39,6 +39,13 @@ describe('queue day API', () => {
     vi.stubGlobal('fetch', fetchMock);
     await getAvailability('wp-1', 'svc-1', '2026-09-27');
     expect(String(fetchMock.mock.calls[0][0])).toContain('/washing-points/wp-1/availability?service_id=svc-1&date=2026-09-27');
+  });
+
+  it('getOverflowSlots hits the staff overflow-slots endpoint', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, { items: [] }));
+    vi.stubGlobal('fetch', fetchMock);
+    await getOverflowSlots('wp-1', ['svc-1', 'svc-2'], '2026-09-27');
+    expect(String(fetchMock.mock.calls[0][0])).toContain('/washing-points/wp-1/queue/overflow-slots?service_ids=svc-1,svc-2&date=2026-09-27');
   });
 
   it('getAvailability sends several services as service_ids', async () => {

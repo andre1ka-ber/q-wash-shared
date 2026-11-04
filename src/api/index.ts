@@ -17,6 +17,7 @@ export {
   listQueueDay,
   createManualBooking,
   getAvailability,
+  getOverflowSlots,
 } from './queue';
 export {
   createWashingPoint,

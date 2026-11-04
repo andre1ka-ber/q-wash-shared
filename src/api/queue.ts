@@ -88,6 +88,15 @@ export function createManualBooking(washingPointId: string, body: ManualBookingC
   });
 }
 
+// GET /washing-points/{id}/queue/overflow-slots — staff/worker/admin. Every
+// slot of the day, taken or not (available_boxes is always empty): an
+// overflow booking's time is only the client's expected arrival.
+export function getOverflowSlots(washingPointId: string, serviceIds: string | string[], date: string): Promise<AvailabilityList> {
+  const ids = Array.isArray(serviceIds) ? serviceIds : [serviceIds];
+  const param = ids.length === 1 ? `service_id=${ids[0]}` : `service_ids=${ids.join(',')}`;
+  return apiRequest<AvailabilityList>(`/washing-points/${washingPointId}/queue/overflow-slots?${param}&date=${date}`);
+}
+
 // GET /washing-points/{id}/availability — public. 15-minute candidate
 // windows on one day with which boxes are free for each, sized for the
 // services' summed duration. A single id uses the original service_id param.
