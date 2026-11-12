@@ -17,6 +17,13 @@ export function createWashingPoint(body: WashingPointCreate): Promise<WashingPoi
   return apiRequest<WashingPointCreated>('/washing-points', { method: 'POST', body: JSON.stringify(body) });
 }
 
+// Public list (no auth): active and paused points with their hours. Points still
+// in pending_review are not returned. The admin list (listAdminWashingPoints)
+// has no hours, so the admin Мойки table joins the two by id.
+export function listWashingPoints(): Promise<{ items: WashingPoint[] }> {
+  return apiRequest<{ items: WashingPoint[] }>('/washing-points');
+}
+
 export function getWashingPoint(id: string): Promise<WashingPoint> {
   return apiRequest<WashingPoint>(`/washing-points/${id}`);
 }

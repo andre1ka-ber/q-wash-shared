@@ -10,6 +10,7 @@ import { getSchedule, replaceSchedule } from './schedule';
 import { createPriceOption, createService, deactivateService, deletePriceOption, listServices, updatePriceOption, updateService } from './services';
 import {
   createWashingPoint,
+  listWashingPoints,
   getWashingPoint,
   getWashingPointCredentials,
   createWashingPointCredentials,
@@ -71,6 +72,7 @@ const cases: Case[] = [
   { name: 'createOwner', call: () => createOwner({ name: 'O' }), method: 'POST', path: '/owners', body: { name: 'O' } },
   { name: 'updateOwner', call: () => updateOwner('o1', { name: 'P' }), method: 'PATCH', path: '/owners/o1', body: { name: 'P' } },
 
+  { name: 'listWashingPoints', call: () => listWashingPoints(), method: 'GET', path: '/washing-points' },
   { name: 'getWashingPoint', call: () => getWashingPoint('wp'), method: 'GET', path: '/washing-points/wp' },
   { name: 'updateWashingPoint', call: () => updateWashingPoint('wp', { status: 'paused' }), method: 'PATCH', path: '/washing-points/wp', body: { status: 'paused' } },
   { name: 'createWashingPoint', call: () => createWashingPoint({ name: 'W', address: 'A', latitude: 1, longitude: 2, boxes_count: 1 }), method: 'POST', path: '/washing-points', body: { name: 'W', address: 'A', latitude: 1, longitude: 2, boxes_count: 1 } },

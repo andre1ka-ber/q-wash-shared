@@ -21,6 +21,7 @@ export {
 } from './queue';
 export {
   createWashingPoint,
+  listWashingPoints,
   getWashingPoint,
   updateWashingPoint,
   getWashingPointCredentials,

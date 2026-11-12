@@ -463,3 +463,5 @@ See `PLAN.md` for the full plan and build order.
 
 - 2026-11-04 — Overflow box support: `QueueDayItem.is_overflow?` / `BoardItem.is_overflow?`, `ManualBookingCreate.overflow?` (+ `box_number`
   now optional), new `getOverflowSlots` (`GET /washing-points/{id}/queue/overflow-slots`, staff). Test added to `queue.test.ts`.
+
+- 2026-11-12 — `listWashingPoints()` (`GET /washing-points`, public list: active + paused points with `open_time`/`close_time`; pending_review points are not returned). Used by the admin Мойки table to show hours. Test added to `endpoints.test.ts`.
