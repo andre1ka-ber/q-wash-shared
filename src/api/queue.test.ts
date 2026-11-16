@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createManualBooking, getAvailability, getOverflowSlots, listQueueDay, updateBookingStatus } from './queue';
+import { confirmBooking, createManualBooking, getAvailability, getOverflowSlots, listQueueDay, rejectBooking, updateBookingStatus } from './queue';
 
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -62,5 +62,16 @@ describe('queue day API', () => {
     await updateBookingStatus('b1', 'queue');
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ status: 'no_show' });
     expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual({ status: 'queue' });
+  });
+
+  it('confirmBooking and rejectBooking PATCH the decision endpoints', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, { id: 'b1' }));
+    vi.stubGlobal('fetch', fetchMock);
+    await confirmBooking('b1');
+    await rejectBooking('b1');
+    expect(String(fetchMock.mock.calls[0][0])).toContain('/queue/b1/confirm');
+    expect(fetchMock.mock.calls[0][1].method).toBe('PATCH');
+    expect(String(fetchMock.mock.calls[1][0])).toContain('/queue/b1/reject');
+    expect(fetchMock.mock.calls[1][1].method).toBe('PATCH');
   });
 });

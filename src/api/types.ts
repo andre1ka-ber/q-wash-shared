@@ -35,6 +35,7 @@ export interface WashingPointCreate {
   status?: WashingPointStatus;
   description?: string;
   amenities?: string[];
+  require_confirmation?: boolean;
 }
 
 export interface WashingPoint {
@@ -52,6 +53,9 @@ export interface WashingPoint {
   // sent as null/[] — treat as possibly absent, not just possibly null.
   description?: string;
   amenities?: string[];
+  // Online bookings start as 'pending' until staff confirm/reject them.
+  // Always sent by the API; optional here only so existing fixtures compile.
+  require_confirmation?: boolean;
 }
 
 export interface Credential {
@@ -94,6 +98,7 @@ export interface WashingPointUpdate {
   status?: WashingPointStatus;
   description?: string;
   amenities?: string[];
+  require_confirmation?: boolean;
 }
 
 export interface AdminWashingPoint {
@@ -325,7 +330,9 @@ export interface Reports {
   boxes: ReportsBoxRow[];
 }
 
-export type BookingStatus = 'queue' | 'waiting' | 'washing' | 'ready' | 'canceled' | 'no_show';
+// 'pending' = online booking awaiting staff confirmation (point has
+// require_confirmation): holds its slot, left via confirm/reject/cancel only.
+export type BookingStatus = 'pending' | 'queue' | 'waiting' | 'washing' | 'ready' | 'canceled' | 'no_show';
 
 // One service of a booking. A booking's top-level service_id /
 // price_option_id mirror its first item.

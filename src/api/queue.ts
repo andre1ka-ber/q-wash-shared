@@ -65,11 +65,23 @@ export function getReports(washingPointId: string, period: ReportsPeriod): Promi
 
 // Reachable by the booking's own customer or by staff/worker/admin at its
 // washing point (broadened RBAC, docs/PLAN_WEB_APPS.md phase 7) — only
-// valid while status is queue/waiting (409 cannot_cancel once washing has
+// valid while status is pending/queue/waiting (409 cannot_cancel once washing has
 // started, see queue.Manager.CancelBooking). q-wash-worker's "Снять"
 // no-show action.
 export function cancelBooking(id: string): Promise<Booking> {
   return apiRequest<Booking>(`/queue/${id}/cancel`, { method: 'PATCH' });
+}
+
+// PATCH /queue/{id}/confirm and /reject — staff/admin at the booking's own
+// point. Confirm moves a 'pending' booking to 'queue'; reject cancels it
+// (status 'canceled'). Both 409 not_pending for any other status. The
+// customer is pushed the decision.
+export function confirmBooking(id: string): Promise<Booking> {
+  return apiRequest<Booking>(`/queue/${id}/confirm`, { method: 'PATCH' });
+}
+
+export function rejectBooking(id: string): Promise<Booking> {
+  return apiRequest<Booking>(`/queue/${id}/reject`, { method: 'PATCH' });
 }
 
 // GET /washing-points/{id}/queue/day?date=YYYY-MM-DD — staff/worker/admin at

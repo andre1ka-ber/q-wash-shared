@@ -14,6 +14,8 @@ export {
   pauseBooking,
   resumeBooking,
   cancelBooking,
+  confirmBooking,
+  rejectBooking,
   listQueueDay,
   createManualBooking,
   getAvailability,

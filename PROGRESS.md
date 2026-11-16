@@ -465,3 +465,6 @@ See `PLAN.md` for the full plan and build order.
   now optional), new `getOverflowSlots` (`GET /washing-points/{id}/queue/overflow-slots`, staff). Test added to `queue.test.ts`.
 
 - 2026-11-12 — `listWashingPoints()` (`GET /washing-points`, public list: active + paused points with `open_time`/`close_time`; pending_review points are not returned). Used by the admin Мойки table to show hours. Test added to `endpoints.test.ts`.
+
+- 2026-11-16 — Manual booking confirmation: `BookingStatus` gains `'pending'`; `WashingPoint`/`WashingPointCreate`/`WashingPointUpdate` gain `require_confirmation`;
+  new `confirmBooking` / `rejectBooking` (`PATCH /queue/{id}/confirm|reject`, staff/admin). Test added to `queue.test.ts` (88 tests).
