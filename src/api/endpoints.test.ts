@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getAdminStats, listAdminWashingPoints } from './admin';
+import { getAdminAnalytics, getAdminPlatformAnalytics, getAdminStats, listAdminWashingPoints } from './admin';
 import { changeOwnPassword } from './auth';
 import { listBoxes, createBox, updateBox, deleteBox } from './boxes';
 import { createConnectionRequest, listConnectionRequests, reviewConnectionRequest } from './connectionRequests';
@@ -104,6 +104,23 @@ describe('q-wash-api endpoint wrappers', () => {
     expect(req.path).toBe(path);
     if (body === undefined) expect(req.body).toBeUndefined();
     else expect(JSON.parse(req.body as string)).toEqual(body);
+  });
+
+  it('getAdminAnalytics passes the period as a query parameter', async () => {
+    const fetchMock = stubFetch(200, {});
+    await getAdminAnalytics('30');
+    const req = lastCall(fetchMock);
+    expect(req.method).toBe('GET');
+    expect(req.path).toBe('/admin/analytics');
+    expect(req.search).toBe('?period=30');
+  });
+
+  it('getAdminPlatformAnalytics passes the period as a query parameter', async () => {
+    const fetchMock = stubFetch(200, {});
+    await getAdminPlatformAnalytics('7');
+    const req = lastCall(fetchMock);
+    expect(req.path).toBe('/admin/analytics/platform');
+    expect(req.search).toBe('?period=7');
   });
 
   it('listConnectionRequests filters by status only when given', async () => {

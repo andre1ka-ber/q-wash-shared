@@ -12,3 +12,5 @@ export { ConfirmDialog } from './ConfirmDialog';
 export type { ConfirmDialogProps } from './ConfirmDialog';
 export { CredentialsRevealModal } from './CredentialsRevealModal';
 export type { CredentialsRevealItem, CredentialsRevealModalProps } from './CredentialsRevealModal';
+export { SegmentedControl } from './SegmentedControl';
+export type { SegmentedControlProps } from './SegmentedControl';

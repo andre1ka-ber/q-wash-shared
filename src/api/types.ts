@@ -110,6 +110,8 @@ export interface AdminWashingPoint {
   status: WashingPointStatus;
   boxes_count: number;
   services_count: number;
+  /** Staff/worker login accounts scoped to the point (admin "Доступ" column). */
+  accounts_count: number;
   /** Relative "/uploads/..." URL; resolve with resolveApiAssetUrl before rendering. Absent if the point has no photos yet. */
   cover_url?: string | null;
   created_at: string;
@@ -122,9 +124,78 @@ export interface AdminWashingPointList {
 export interface AdminStats {
   points_total: number;
   points_active: number;
+  /** Points created in the last 30 days. */
+  points_added_30d: number;
   bookings_today: number;
   canceled_today: number;
+  /** Same count as bookings_today for the previous calendar day. */
+  bookings_yesterday: number;
   average_utilization: number;
+  /** Same ratio for the previous calendar day (0–1). */
+  average_utilization_yesterday: number;
+}
+
+export type AdminAnalyticsPeriod = 'today' | '7' | '30';
+
+export interface AdminAnalyticsTotals {
+  bookings: number;
+  /** Canceled plus no-show. */
+  canceled: number;
+  revenue_cents: number;
+  new_customers: number;
+  /** 0–1 */
+  cancel_share: number;
+}
+
+export interface AdminAnalytics {
+  period: AdminAnalyticsPeriod;
+  from: string;
+  to: string;
+  current: AdminAnalyticsTotals;
+  /** The window of the same length right before `current`. */
+  previous: AdminAnalyticsTotals;
+  series: { start: string; end: string; value: number }[];
+  top_points: { washing_point_id: string; name: string; revenue_cents: number }[];
+}
+
+export type ClientPlatform = 'android' | 'ios' | 'web' | 'other';
+
+export interface AdminCountBy {
+  key: string;
+  count: number;
+}
+
+export interface AdminPlatformWash {
+  washing_point_id: string;
+  name: string;
+  last_login_at: string | null;
+  last_role?: 'staff' | 'worker' | 'admin' | null;
+  last_platform?: ClientPlatform | null;
+  staff: number;
+  sessions_7d: number;
+  bookings_7d: number;
+  /** Distinct days with a staff/worker login in the last 7 days (0–7). */
+  active_days_7d: number;
+  health: 'ok' | 'warn' | 'bad';
+}
+
+export interface AdminPlatformAnalytics {
+  period: AdminAnalyticsPeriod;
+  kpis: {
+    customers_total: number;
+    customers_new: number;
+    customers_new_prev: number;
+    customers_active: number;
+    customers_active_prev: number;
+    staff_total: number;
+    staff_active: number;
+  };
+  series: { start: string; end: string; value: number }[];
+  health: { unconfirmed_over_15_min: number; inactive_points_7d: number; canceled_in_period: number };
+  washes: AdminPlatformWash[];
+  devices: AdminCountBy[];
+  versions: AdminCountBy[];
+  channels: AdminCountBy[];
 }
 
 export interface Owner {

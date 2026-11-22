@@ -20,14 +20,16 @@ const TEXT: Record<StatusPillKind, string> = {
 export interface StatusPillProps {
   kind: StatusPillKind;
   children: React.ReactNode;
+  /** "sm" is the compact chip used for table cells like "2 аккаунта". */
+  size?: 'md' | 'sm';
 }
 
-export function StatusPill({ kind, children }: StatusPillProps) {
+export function StatusPill({ kind, children, size = 'md' }: StatusPillProps) {
   const style: CSSProperties = {
     display: 'inline-block',
-    padding: '5px 11px',
-    borderRadius: radius.sm,
-    fontSize: 12,
+    padding: size === 'sm' ? '4px 9px' : '5px 11px',
+    borderRadius: size === 'sm' ? 9 : radius.sm,
+    fontSize: size === 'sm' ? 11 : 12,
     fontWeight: 600,
     whiteSpace: 'nowrap',
     background: BACKGROUND[kind],

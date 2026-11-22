@@ -468,3 +468,6 @@ See `PLAN.md` for the full plan and build order.
 
 - 2026-11-16 — Manual booking confirmation: `BookingStatus` gains `'pending'`; `WashingPoint`/`WashingPointCreate`/`WashingPointUpdate` gain `require_confirmation`;
   new `confirmBooking` / `rejectBooking` (`PATCH /queue/{id}/confirm|reject`, staff/admin). Test added to `queue.test.ts` (88 tests).
+
+- 2026-11-22 — Admin design sync: `getAdminAnalytics` / `getAdminPlatformAnalytics` + types, `AdminWashingPoint.accounts_count`, new `AdminStats` fields,
+  `SegmentedControl`, `StatusPill size="sm"`, `StatCard compact` + nullable `delta`. Tests added to `endpoints.test.ts`.

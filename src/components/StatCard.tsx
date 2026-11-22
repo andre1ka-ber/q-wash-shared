@@ -6,7 +6,9 @@ import { StatusPill, type StatusPillKind } from './StatusPill';
 export interface StatCardProps {
   label: string;
   value: string | number;
-  delta?: { text: string; kind: StatusPillKind };
+  delta?: { text: string; kind: StatusPillKind } | null;
+  /** Phone-size card: smaller label/value, as in the mobile design. */
+  compact?: boolean;
 }
 
 const labelStyle: CSSProperties = {
@@ -23,13 +25,13 @@ const valueStyle: CSSProperties = {
   fontFamily: font.display,
 };
 
-export function StatCard({ label, value, delta }: StatCardProps) {
+export function StatCard({ label, value, delta, compact }: StatCardProps) {
   return (
-    <Panel style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <div style={labelStyle}>{label}</div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 9 }}>
-        <div style={valueStyle}>{value}</div>
-        {delta && <StatusPill kind={delta.kind}>{delta.text}</StatusPill>}
+    <Panel style={{ padding: compact ? 14 : 18, borderRadius: compact ? 16 : undefined, display: 'flex', flexDirection: 'column', gap: compact ? 6 : 8 }}>
+      <div style={compact ? { ...labelStyle, fontSize: 10.5 } : labelStyle}>{label}</div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: compact ? 7 : 9, flexWrap: 'wrap' }}>
+        <div style={compact ? { ...valueStyle, fontSize: 22, fontWeight: 700, letterSpacing: '-.03em' } : valueStyle}>{value}</div>
+        {delta && <StatusPill kind={delta.kind} size={compact ? 'sm' : 'md'}>{delta.text}</StatusPill>}
       </div>
     </Panel>
   );
