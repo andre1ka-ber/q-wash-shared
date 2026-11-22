@@ -1,5 +1,5 @@
 import { apiRequest } from './client';
-import type { AdminAnalytics, AdminAnalyticsPeriod, AdminPlatformAnalytics, AdminStats, AdminWashingPointList } from './types';
+import type { PlatformSettings, PlatformSettingsUpdate, AdminAnalytics, AdminAnalyticsPeriod, AdminPlatformAnalytics, AdminStats, AdminWashingPointList } from './types';
 
 export function listAdminWashingPoints(): Promise<AdminWashingPointList> {
   return apiRequest<AdminWashingPointList>('/admin/washing-points');
@@ -15,4 +15,12 @@ export function getAdminPlatformAnalytics(period: AdminAnalyticsPeriod): Promise
 
 export function getAdminStats(): Promise<AdminStats> {
   return apiRequest<AdminStats>('/admin/stats');
+}
+
+export function getAdminSettings(): Promise<PlatformSettings> {
+  return apiRequest<PlatformSettings>('/admin/settings');
+}
+
+export function updateAdminSettings(update: PlatformSettingsUpdate): Promise<PlatformSettings> {
+  return apiRequest<PlatformSettings>('/admin/settings', { method: 'PATCH', body: JSON.stringify(update) });
 }

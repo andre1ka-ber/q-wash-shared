@@ -471,3 +471,5 @@ See `PLAN.md` for the full plan and build order.
 
 - 2026-11-22 — Admin design sync: `getAdminAnalytics` / `getAdminPlatformAnalytics` + types, `AdminWashingPoint.accounts_count`, new `AdminStats` fields,
   `SegmentedControl`, `StatusPill size="sm"`, `StatCard compact` + nullable `delta`. Tests added to `endpoints.test.ts`.
+
+- 2026-11-22 — `getAdminSettings` / `updateAdminSettings` + `PlatformSettings` types for the admin Настройки screen (`endpoints.test.ts`).

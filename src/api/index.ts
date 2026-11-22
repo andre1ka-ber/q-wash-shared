@@ -1,7 +1,7 @@
 export { apiRequest, resolveApiAssetUrl } from './client';
 export { ApiError } from './errors';
 export { loginWithPassword, changeOwnPassword, logout, getMe } from './auth';
-export { listAdminWashingPoints, getAdminStats, getAdminAnalytics, getAdminPlatformAnalytics } from './admin';
+export { listAdminWashingPoints, getAdminStats, getAdminAnalytics, getAdminPlatformAnalytics, getAdminSettings, updateAdminSettings } from './admin';
 export { listOwners, createOwner, updateOwner } from './owners';
 export { listConnectionRequests, createConnectionRequest, reviewConnectionRequest } from './connectionRequests';
 export {
@@ -69,6 +69,8 @@ export type {
   AdminWashingPointList,
   AdminStats,
   AdminAnalytics,
+  PlatformSettings,
+  PlatformSettingsUpdate,
   AdminAnalyticsPeriod,
   AdminAnalyticsTotals,
   AdminPlatformAnalytics,

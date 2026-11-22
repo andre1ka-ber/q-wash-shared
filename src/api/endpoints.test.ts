@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getAdminAnalytics, getAdminPlatformAnalytics, getAdminStats, listAdminWashingPoints } from './admin';
+import { getAdminSettings, updateAdminSettings, getAdminAnalytics, getAdminPlatformAnalytics, getAdminStats, listAdminWashingPoints } from './admin';
 import { changeOwnPassword } from './auth';
 import { listBoxes, createBox, updateBox, deleteBox } from './boxes';
 import { createConnectionRequest, listConnectionRequests, reviewConnectionRequest } from './connectionRequests';
@@ -78,6 +78,8 @@ const cases: Case[] = [
   { name: 'createWashingPoint', call: () => createWashingPoint({ name: 'W', address: 'A', latitude: 1, longitude: 2, boxes_count: 1 }), method: 'POST', path: '/washing-points', body: { name: 'W', address: 'A', latitude: 1, longitude: 2, boxes_count: 1 } },
 
   { name: 'listAdminWashingPoints', call: () => listAdminWashingPoints(), method: 'GET', path: '/admin/washing-points' },
+  { name: 'getAdminSettings', call: () => getAdminSettings(), method: 'GET', path: '/admin/settings' },
+  { name: 'updateAdminSettings', call: () => updateAdminSettings({ sms_confirmation: true }), method: 'PATCH', path: '/admin/settings', body: { sms_confirmation: true } },
   { name: 'getAdminStats', call: () => getAdminStats(), method: 'GET', path: '/admin/stats' },
   { name: 'getWashingPointCredentials', call: () => getWashingPointCredentials('wp'), method: 'GET', path: '/washing-points/wp/credentials' },
   { name: 'createWashingPointCredentials', call: () => createWashingPointCredentials('wp', 'worker'), method: 'POST', path: '/washing-points/wp/credentials/worker' },

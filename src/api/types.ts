@@ -135,6 +135,18 @@ export interface AdminStats {
   average_utilization_yesterday: number;
 }
 
+/** Platform rules edited in the admin "Настройки" screen (GET/PATCH /admin/settings). 0 = off for the two minute fields. */
+export interface PlatformSettings {
+  booking_horizon_days: number;
+  no_show_auto_cancel_min: number;
+  client_cancel_cutoff_min: number;
+  sms_confirmation: boolean;
+  new_point_moderation: boolean;
+  updated_at: string;
+}
+
+export type PlatformSettingsUpdate = Partial<Omit<PlatformSettings, 'updated_at'>>;
+
 export type AdminAnalyticsPeriod = 'today' | '7' | '30';
 
 export interface AdminAnalyticsTotals {
