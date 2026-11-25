@@ -11,6 +11,8 @@ export interface CredentialsRevealItem {
 export interface CredentialsRevealModalProps {
   title: string;
   items: CredentialsRevealItem[];
+  /** Optional extra line (e.g. "2 услуги не добавились"), shown above the credentials in the warning colour. */
+  notice?: string;
   onClose: () => void;
 }
 
@@ -22,7 +24,7 @@ export interface CredentialsRevealModalProps {
 // without having seen the password. Used for the two-account reveal at
 // creation and the single-account reveal after a password reset, in both
 // q-wash-admin (any point) and q-wash-cabinet (own point).
-export function CredentialsRevealModal({ title, items, onClose }: CredentialsRevealModalProps) {
+export function CredentialsRevealModal({ title, items, notice, onClose }: CredentialsRevealModalProps) {
   return (
     <div
       style={{
@@ -55,6 +57,7 @@ export function CredentialsRevealModal({ title, items, onClose }: CredentialsRev
           Пароли показываются только один раз и нигде больше не сохраняются. Запишите их сейчас — восстановить
           старый пароль нельзя, только сбросить и выдать новый.
         </div>
+        {notice && <div style={{ color: color.warn, fontSize: 13, lineHeight: 1.5 }}>{notice}</div>}
         {items.map((item) => (
           <CredentialCard key={item.label} label={item.label} username={item.username} password={item.password} />
         ))}
