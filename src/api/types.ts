@@ -1,7 +1,10 @@
 // Hand-written to match q-wash-api/docs/openapi.yaml — see q-wash-shared/PLAN.md
 // ("API types" decision) for why this isn't codegen.
 
-export type UserRole = 'customer' | 'staff' | 'admin' | 'worker';
+export type UserRole = 'customer' | 'staff' | 'admin' | 'worker' | 'display';
+
+/** The login accounts a washing point can have. */
+export type PointAccountRole = 'staff' | 'worker' | 'display';
 
 export interface User {
   id: string;
@@ -84,6 +87,7 @@ export interface WashingPointCreated extends WashingPoint {
 export interface WashingPointCredentialUsernames {
   staff: { username: string } | null;
   worker: { username: string } | null;
+  display: { username: string } | null;
 }
 
 export interface WashingPointUpdate {

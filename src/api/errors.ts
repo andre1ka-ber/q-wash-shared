@@ -5,6 +5,7 @@
 const RU_ERROR_MESSAGES: Record<string, string> = {
   invalid_credentials: 'Неверный логин или пароль',
   forbidden: 'Недостаточно прав для этого действия',
+  too_many_requests: 'Слишком много запросов. Попробуйте позже.',
   session_expired: 'Сессия истекла, войдите снова',
   network_error: 'Не удалось связаться с сервером',
   invalid_content_type: 'Разрешены только изображения JPEG, PNG, GIF или WebP',

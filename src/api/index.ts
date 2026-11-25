@@ -65,6 +65,7 @@ export type {
   WashingPointCredentialUsernames,
   Credential,
   PointAccounts,
+  PointAccountRole,
   AdminWashingPoint,
   AdminWashingPointList,
   AdminStats,

@@ -473,3 +473,5 @@ See `PLAN.md` for the full plan and build order.
   `SegmentedControl`, `StatusPill size="sm"`, `StatCard compact` + nullable `delta`. Tests added to `endpoints.test.ts`.
 
 - 2026-11-22 — `getAdminSettings` / `updateAdminSettings` + `PlatformSettings` types for the admin Настройки screen (`endpoints.test.ts`).
+
+- 2026-11-25 — Security: `PointAccountRole` and the `display` role in types and credentials calls.
